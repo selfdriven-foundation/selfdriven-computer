@@ -1,0 +1,1261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Principles — selfdriven.computer</title>
+  <meta name="description" content="The core principles behind a clocked, reduced, and verifiable operating model for AI agents." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Tokens ── */
+    :root {
+      --bg: #f5f2ed;
+      --surface: #edeae3;
+      --surface2: #e5e1d8;
+      --border: #ddd8ce;
+      --text: #1a1410;
+      --muted: #6b5f52;
+      --muted2: #9e9085;
+      --accent: #c8442f;
+      --accent-dim: rgba(200,68,47,0.09);
+      --accent-strong: rgba(200,68,47,0.18);
+      --card-radius: 20px;
+      --shadow: 0 2px 16px rgba(0,0,0,0.07);
+      --shadow-hover: 0 8px 32px rgba(0,0,0,0.12);
+      --max: 1100px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0a0a0a;
+        --surface: #161616;
+        --surface2: #1e1e1e;
+        --border: #2a2a2a;
+        --text: #f0ede8;
+        --muted: #b0a89e;
+        --muted2: #7a7268;
+        --accent: #e85d4a;
+        --accent-dim: rgba(232,93,74,0.11);
+        --accent-strong: rgba(232,93,74,0.20);
+        --shadow: 0 2px 16px rgba(0,0,0,0.4);
+        --shadow-hover: 0 8px 40px rgba(0,0,0,0.65);
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(245,242,237,0.82);
+      border-color: var(--border);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    @media (prefers-color-scheme: dark) {
+      nav.scrolled { background: rgba(10,10,10,0.82); }
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo {
+      width: 32px; height: 32px;
+      background: var(--accent);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 14px; font-weight: 800;
+      letter-spacing: -0.03em; flex-shrink: 0;
+    }
+    .nav-name { font-size: 15px; font-weight: 700; color: var(--accent); letter-spacing: -0.02em; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; color: var(--muted);
+      text-decoration: none; padding: 8px 14px; border-radius: 10px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface); }
+    .nav-links a.active { color: var(--accent); }
+    .nav-back {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 500; color: var(--muted);
+      text-decoration: none; padding: 8px 14px; border-radius: 10px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-back:hover { color: var(--text); background: var(--surface); }
+    .nav-cta {
+      font-size: 14px; font-weight: 600;
+      color: white !important; background: var(--accent) !important;
+      border-radius: 999px !important; padding: 9px 20px !important;
+    }
+    .nav-cta:hover { opacity: 0.88; }
+
+    /* ── Page header ── */
+    .page-header {
+      padding-top: 128px;
+      padding-bottom: 72px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 10% 0%, var(--accent-dim), transparent 55%),
+        radial-gradient(ellipse at 90% 100%, var(--accent-dim), transparent 45%);
+      pointer-events: none;
+    }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 500; color: var(--muted2);
+      margin-bottom: 24px;
+    }
+    .breadcrumb a { color: var(--muted2); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb-sep { color: var(--muted2); font-size: 11px; }
+    .breadcrumb-current { color: var(--accent); font-weight: 600; }
+
+    .page-eyebrow {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--accent); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .eyebrow-line {
+      width: 24px; height: 2px;
+      background: var(--accent); border-radius: 2px;
+    }
+
+    .page-header h1 {
+      font-size: clamp(44px, 7vw, 82px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.96;
+      max-width: 800px;
+    }
+    .page-header h1 em { font-style: normal; color: var(--accent); }
+
+    .page-header-meta {
+      display: flex; align-items: center; gap: 24px;
+      margin-top: 32px; flex-wrap: wrap;
+    }
+    .meta-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 500; color: var(--muted);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 999px; padding: 7px 14px;
+    }
+    .meta-pill svg { flex-shrink: 0; }
+
+    /* ── Layout: sidebar + content ── */
+    .principles-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 64px;
+      padding: 72px 0 96px;
+      align-items: start;
+    }
+
+    /* Sticky sidebar */
+    .sidebar {
+      position: sticky;
+      top: 88px;
+    }
+    .sidebar-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--muted2); margin-bottom: 12px;
+    }
+    .sidebar-nav {
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      color: var(--muted);
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+      border: none; background: none;
+      text-align: left; width: 100%;
+    }
+    .sidebar-item:hover { background: var(--surface); color: var(--text); }
+    .sidebar-item.active { background: var(--accent-dim); color: var(--accent); font-weight: 600; }
+    .sidebar-num {
+      font-size: 11px; font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--muted2); min-width: 20px;
+      transition: color 0.2s;
+    }
+    .sidebar-item.active .sidebar-num { color: var(--accent); }
+    .sidebar-divider {
+      height: 1px; background: var(--border);
+      margin: 16px 0;
+    }
+    .sidebar-progress {
+      margin-top: 4px;
+      padding: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .sidebar-progress-label {
+      font-size: 11px; font-weight: 600; color: var(--muted2);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .progress-bar {
+      height: 4px; background: var(--surface2);
+      border-radius: 99px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: var(--accent);
+      border-radius: 99px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    /* ── Principle cards ── */
+    .principle-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.3s;
+      scroll-margin-top: 100px;
+    }
+    .principle-card:hover { box-shadow: var(--shadow-hover); }
+
+    .principle-header {
+      display: flex; align-items: flex-start;
+      gap: 20px;
+      padding: 32px 36px 28px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .principle-num-badge {
+      flex-shrink: 0;
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-strong);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; font-weight: 600;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+    .principle-header-text { flex: 1; }
+    .principle-tag {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--accent); margin-bottom: 8px;
+      display: block;
+    }
+    .principle-header h2 {
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 800; letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+    .principle-header h2 em { font-style: normal; color: var(--accent); }
+    .principle-summary {
+      margin-top: 10px;
+      font-size: 15px; color: var(--muted);
+      line-height: 1.65;
+    }
+    .principle-toggle {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, transform 0.35s;
+      margin-top: 6px;
+    }
+    .principle-card.open .principle-toggle {
+      background: var(--accent-dim);
+      border-color: var(--accent-strong);
+      transform: rotate(180deg);
+    }
+    .principle-toggle svg { display: block; }
+
+    /* Accent bar on open */
+    .principle-card::before {
+      content: '';
+      display: block;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s ease;
+    }
+    .principle-card.open::before { transform: scaleX(1); }
+
+    /* Expandable body */
+    .principle-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1);
+    }
+    .principle-body-inner {
+      padding: 0 36px 36px;
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+    }
+
+    /* Body layout: text + aside */
+    .principle-content {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .principle-prose p {
+      font-size: 15px; line-height: 1.9; color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .principle-prose p:last-child { margin-bottom: 0; }
+    .principle-prose strong { color: var(--text); font-weight: 600; }
+
+    /* Implications list */
+    .implications {
+      margin-top: 24px;
+    }
+    .implications-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--muted2); margin-bottom: 12px;
+    }
+    .implication-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 0;
+      border-top: 1px solid var(--border);
+    }
+    .implication-item:last-child { border-bottom: 1px solid var(--border); }
+    .implication-icon {
+      width: 28px; height: 28px; flex-shrink: 0;
+      border-radius: 8px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-strong);
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+    }
+    .implication-text {
+      font-size: 14px; font-weight: 600; color: var(--text);
+      line-height: 1.4;
+    }
+    .implication-text small {
+      display: block; font-weight: 400; color: var(--muted);
+      font-size: 13px; margin-top: 2px; line-height: 1.55;
+    }
+
+    /* Aside card */
+    .principle-aside {
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .aside-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 20px;
+    }
+    .aside-card-label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--muted2); margin-bottom: 8px;
+    }
+    .aside-card-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; color: var(--text); font-weight: 500;
+      word-break: break-all; line-height: 1.55;
+    }
+    .aside-card-val.large {
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px; font-weight: 400; color: var(--muted);
+      font-family: inherit; letter-spacing: 0;
+    }
+    .keri-event {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+    .keri-key { color: var(--accent); }
+    .keri-str { color: var(--text); }
+    .keri-num { color: var(--muted2); }
+
+    /* ── Closing reflection ── */
+    .closing-section {
+      border-top: 1px solid var(--border);
+      padding: 80px 0;
+    }
+    .closing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    .closing-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.25s, transform 0.25s, border-color 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .closing-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent); opacity: 0; transition: opacity 0.25s;
+    }
+    .closing-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); border-color: var(--accent-strong); }
+    .closing-card:hover::before { opacity: 1; }
+    .closing-card-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--accent-dim); border: 1px solid var(--accent-strong);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+    }
+    .closing-card h3 { font-size: 17px; font-weight: 700; letter-spacing: -0.02em; }
+    .closing-card p { margin-top: 8px; font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+    /* ── CTA strip ── */
+    .cta-strip {
+      background: var(--text);
+      padding: 64px 0;
+    }
+    @media (prefers-color-scheme: dark) {
+      .cta-strip { background: #141414; border-top: 1px solid var(--border); }
+    }
+    .cta-strip-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 32px; flex-wrap: wrap;
+    }
+    .cta-strip h2 {
+      font-size: clamp(24px, 3.5vw, 38px);
+      font-weight: 800; letter-spacing: -0.04em;
+      color: var(--bg); max-width: 520px;
+    }
+    @media (prefers-color-scheme: dark) {
+      .cta-strip h2 { color: var(--text); }
+    }
+    .cta-strip h2 em { font-style: normal; color: var(--accent); }
+    .cta-strip-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      text-decoration: none; font-family: 'Poppins', sans-serif;
+      font-size: 14px; font-weight: 600; border-radius: 999px;
+      padding: 13px 24px; border: 1.5px solid transparent;
+      transition: all 0.2s; cursor: pointer;
+    }
+    .btn-primary { background: var(--accent); color: white; box-shadow: 0 4px 20px var(--accent-strong); }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-ghost { border-color: rgba(245,242,237,0.25); color: rgba(245,242,237,0.85); }
+    .btn-ghost:hover { background: rgba(245,242,237,0.08); transform: translateY(-1px); }
+    @media (prefers-color-scheme: dark) {
+      .btn-ghost { border-color: var(--border); color: var(--muted); }
+      .btn-ghost:hover { background: var(--surface); color: var(--text); }
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 32px 0 48px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .footer-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .footer-logo { width: 20px; height: 20px; background: var(--accent); border-radius: 6px; }
+    .footer-name { font-size: 13px; font-weight: 700; color: var(--accent); }
+    .footer-copy { font-size: 13px; color: var(--muted2); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 13px; color: var(--muted2); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ── Reveal ── */
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Responsive ── */
+    @media (max-width: 1000px) {
+      .principles-layout { grid-template-columns: 1fr; gap: 40px; }
+      .sidebar { position: static; display: flex; flex-direction: column; }
+      .sidebar-nav { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+      .sidebar-item { width: auto; padding: 8px 12px; }
+      .principle-content { grid-template-columns: 1fr; }
+      .principle-aside { display: grid; grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 760px) {
+      .closing-grid { grid-template-columns: 1fr; }
+      .principle-header { padding: 24px 22px 20px; }
+      .principle-body-inner { padding: 20px 22px 24px; }
+      .nav-links .hide-sm { display: none; }
+      .principle-aside { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav id="nav">
+    <div class="container nav-inner">
+      <a href="selfdriven_computer_homepage_v2.html" class="nav-brand">
+        <div class="nav-logo">sd</div>
+        <span class="nav-name">selfdriven.computer</span>
+      </a>
+      <div class="nav-links">
+        <a href="selfdriven_computer_homepage_v2.html#architecture" class="hide-sm">Architecture</a>
+        <a href="#" class="active">Principles</a>
+        <a class="btn-cta" style="font-size:14px;font-weight:600;color:white;background:var(--accent);border-radius:999px;padding:9px 20px;text-decoration:none;" href="selfdriven_computer_homepage_v2.html#contact">Get in touch</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page header -->
+  <header class="page-header">
+    <div class="container" style="position:relative;">
+      <div class="breadcrumb reveal">
+        <a href="selfdriven_computer_homepage_v2.html">selfdriven.computer</a>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">Principles</span>
+      </div>
+      <div class="page-eyebrow reveal" style="transition-delay:0.05s">
+        <span class="eyebrow-line"></span>
+        Foundation document
+      </div>
+      <h1 class="reveal" style="transition-delay:0.10s">The principles of<br>a <em>verifiable</em> agent OS.</h1>
+      <div class="page-header-meta reveal" style="transition-delay:0.16s">
+        <span class="meta-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          7 principles
+        </span>
+        <span class="meta-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          12 min read
+        </span>
+        <span class="meta-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          selfdriven Foundation
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container principles-layout">
+
+      <!-- Sidebar -->
+      <aside class="sidebar reveal">
+        <div class="sidebar-label">In this document</div>
+        <nav class="sidebar-nav" id="sidebar-nav">
+          <button class="sidebar-item active" data-target="p1"><span class="sidebar-num">01</span>Clock first</button>
+          <button class="sidebar-item" data-target="p2"><span class="sidebar-num">02</span>Reduce the set</button>
+          <button class="sidebar-item" data-target="p3"><span class="sidebar-num">03</span>Proof, not promise</button>
+          <button class="sidebar-item" data-target="p4"><span class="sidebar-num">04</span>Identity is root</button>
+          <button class="sidebar-item" data-target="p5"><span class="sidebar-num">05</span>Delegate carefully</button>
+          <button class="sidebar-item" data-target="p6"><span class="sidebar-num">06</span>Compose safely</button>
+          <button class="sidebar-item" data-target="p7"><span class="sidebar-num">07</span>Human in context</button>
+        </nav>
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-progress">
+          <div class="sidebar-progress-label">Reading progress</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Principles -->
+      <div class="principles-list">
+
+        <!-- P1 -->
+        <article class="principle-card open reveal" id="p1">
+          <div class="principle-header" onclick="toggleCard(this)">
+            <div class="principle-num-badge">01</div>
+            <div class="principle-header-text">
+              <span class="principle-tag">Timing</span>
+              <h2>Clock first. <em>Everything else follows.</em></h2>
+              <p class="principle-summary">A verifiable agent system must start with time. Not wall-clock time — but sequenced, anchored, tamper-evident time that every participant agrees on.</p>
+            </div>
+            <div class="principle-toggle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="principle-body" style="max-height:1200px">
+            <div class="principle-body-inner">
+              <div class="principle-content">
+                <div class="principle-prose">
+                  <p>Before an agent can act, decide, or communicate, it needs a shared sense of sequence. In traditional computing, the clock is an implementation detail. In agentic systems operating across distributed networks, the clock is a <strong>trust primitive</strong>.</p>
+                  <p>The KERI key event log solves this elegantly. Each event in the log carries a sequence number — <code style="font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--surface2);padding:2px 6px;border-radius:5px;">sn</code> — that establishes strict ordering without relying on a central authority. An agent's entire operational history becomes a totally ordered sequence of verifiable events.</p>
+                  <p>This is the foundation for everything else. Without a shared, verifiable sequence, there is no meaningful audit trail. Without an audit trail, there is no accountability. Without accountability, there is no trust.</p>
+                  <div class="implications">
+                    <div class="implications-label">Implications</div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                      </div>
+                      <div class="implication-text">Every action produces a sequenced event
+                        <small>No gap in sequence numbers is tolerated. Missing events trigger recovery protocols.</small>
+                      </div>
+                    </div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      </div>
+                      <div class="implication-text">Witnesses anchor events in external time
+                        <small>A distributed witness network provides independent confirmation of event timing.</small>
+                      </div>
+                    </div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                      </div>
+                      <div class="implication-text">Replay is always possible
+                        <small>Any agent's state can be reconstructed by replaying its KEL from inception.</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="principle-aside">
+                  <div class="aside-card">
+                    <div class="aside-card-label">KERI Event — icp (inception)</div>
+                    <div class="keri-event"><span class="keri-key">"v"</span>: <span class="keri-str">"KERI10JSON..."</span>,<br><span class="keri-key">"t"</span>: <span class="keri-str">"icp"</span>,<br><span class="keri-key">"d"</span>: <span class="keri-str">"EKE4g_0hDG..."</span>,<br><span class="keri-key">"i"</span>: <span class="keri-str">"EKE4g_0hDG..."</span>,<br><span class="keri-key">"sn"</span>: <span class="keri-num">0</span>,<br><span class="keri-key">"kt"</span>: <span class="keri-num">1</span>,<br><span class="keri-key">"wt"</span>: <span class="keri-num">2</span></div>
+                  </div>
+                  <div class="aside-card">
+                    <div class="aside-card-label">Principle in one line</div>
+                    <div class="aside-card-val large">Sequence number zero is the origin. All trust is built on top of it.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- P2 -->
+        <article class="principle-card reveal" id="p2" style="transition-delay:0.05s">
+          <div class="principle-header" onclick="toggleCard(this)">
+            <div class="principle-num-badge">02</div>
+            <div class="principle-header-text">
+              <span class="principle-tag">Instruction design</span>
+              <h2>Reduce the set. <em>Complexity is the enemy of trust.</em></h2>
+              <p class="principle-summary">The more an agent can do, the harder it is to reason about what it will do. A reduced instruction set trades raw capability for auditability — and in agentic systems, auditability is capability.</p>
+            </div>
+            <div class="principle-toggle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="principle-body">
+            <div class="principle-body-inner">
+              <div class="principle-content">
+                <div class="principle-prose">
+                  <p>RISC processors proved that a small, well-defined instruction set outperforms bloated architectures across almost every metric. The same logic applies to agentic systems. When an agent's behavioural surface is small, <strong>every deviation is visible</strong>.</p>
+                  <p>selfdriven.computer proposes five core primitives: <strong>Perceive</strong>, <strong>Reason</strong>, <strong>Decide</strong>, <strong>Act</strong>, and <strong>Attest</strong>. Every observable agent behaviour is a composition of these five. Higher-order capabilities emerge from composition, not from expanding the primitive set.</p>
+                  <p>This means an auditor reviewing an agent's KEL doesn't need to understand the full complexity of the agent's internal model. They need to understand the semantics of five operations and the sequence in which they were invoked.</p>
+                  <div class="implications">
+                    <div class="implications-label">Implications</div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                      </div>
+                      <div class="implication-text">Five primitives: Perceive · Reason · Decide · Act · Attest
+                        <small>All agent behaviour is expressed as compositions of these five operations.</small>
+                      </div>
+                    </div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                      </div>
+                      <div class="implication-text">Smaller surface = stronger security posture
+                        <small>Each additional operation type is a new attack surface for adversarial agents.</small>
+                      </div>
+                    </div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20M12 2l10 10-10 10"/></svg>
+                      </div>
+                      <div class="implication-text">Composability replaces complexity
+                        <small>Rich agent behaviours emerge from primitive sequences, not custom instruction extensions.</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="principle-aside">
+                  <div class="aside-card">
+                    <div class="aside-card-label">Core primitives</div>
+                    <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px;">
+                      <div style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:var(--surface2);border-radius:8px;font-size:12px;font-family:'JetBrains Mono',monospace;">
+                        <span style="color:var(--accent);font-weight:600;min-width:16px;">P</span><span style="color:var(--muted);">Perceive</span>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:var(--surface2);border-radius:8px;font-size:12px;font-family:'JetBrains Mono',monospace;">
+                        <span style="color:var(--accent);font-weight:600;min-width:16px;">R</span><span style="color:var(--muted);">Reason</span>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:var(--surface2);border-radius:8px;font-size:12px;font-family:'JetBrains Mono',monospace;">
+                        <span style="color:var(--accent);font-weight:600;min-width:16px;">D</span><span style="color:var(--muted);">Decide</span>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:var(--surface2);border-radius:8px;font-size:12px;font-family:'JetBrains Mono',monospace;">
+                        <span style="color:var(--accent);font-weight:600;min-width:16px;">A</span><span style="color:var(--muted);">Act</span>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:var(--accent-dim);border:1px solid var(--accent-strong);border-radius:8px;font-size:12px;font-family:'JetBrains Mono',monospace;">
+                        <span style="color:var(--accent);font-weight:600;min-width:16px;">A</span><span style="color:var(--muted);">Attest</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="aside-card">
+                    <div class="aside-card-label">Principle in one line</div>
+                    <div class="aside-card-val large">What an agent cannot do, it cannot be tricked into doing.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- P3 -->
+        <article class="principle-card reveal" id="p3" style="transition-delay:0.08s">
+          <div class="principle-header" onclick="toggleCard(this)">
+            <div class="principle-num-badge">03</div>
+            <div class="principle-header-text">
+              <span class="principle-tag">Verification</span>
+              <h2>Proof, not promise. <em>Trust must be checkable.</em></h2>
+              <p class="principle-summary">Statements about what an agent has done, can do, or is authorised to do must be cryptographically verifiable — not dependent on the agent, its operator, or any third party being honest.</p>
+            </div>
+            <div class="principle-toggle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="principle-body">
+            <div class="principle-body-inner">
+              <div class="principle-content">
+                <div class="principle-prose">
+                  <p>The dominant trust model in software is attestation by authority: a certificate authority says a server is legitimate; a platform says an app is safe; an operator says their AI is aligned. These chains of assertion are only as strong as their weakest link — and the weakest link is always human.</p>
+                  <p>selfdriven.computer inverts this. <strong>Every claim is a proof</strong>. An ACDC credential asserts what an agent is authorised to do, and that assertion is cryptographically bound to the agent's KERI AID. The verifier needs only the agent's inception event and the credential schema — both of which are public and independently verifiable.</p>
+                  <p>This isn't a subtle improvement. It's an architectural shift. When trust doesn't require trusting anyone, the trust ecosystem scales without introducing new points of failure.</p>
+                  <div class="implications">
+                    <div class="implications-label">Implications</div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                      </div>
+                      <div class="implication-text">ACDC credentials bind authority cryptographically
+                        <small>Credential schemas are public. Verification requires no privileged access.</small>
+                      </div>
+                    </div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      </div>
+                      <div class="implication-text">No trusted third party required
+                        <small>Verification is self-contained. The credential itself carries the proof chain.</small>
+                      </div>
+                    </div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
+                      </div>
+                      <div class="implication-text">Attestations are durable
+                        <small>Proofs survive the dissolution of the issuing organisation. The KEL is the record.</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="principle-aside">
+                  <div class="aside-card">
+                    <div class="aside-card-label">ACDC Credential — partial</div>
+                    <div class="keri-event"><span class="keri-key">"type"</span>: <span class="keri-str">"AgentScope"</span>,<br><span class="keri-key">"issuer"</span>: <span class="keri-str">"EKE4g..."</span>,<br><span class="keri-key">"subject"</span>: {<br>&nbsp;&nbsp;<span class="keri-key">"aid"</span>: <span class="keri-str">"EBot7j..."</span>,<br>&nbsp;&nbsp;<span class="keri-key">"scope"</span>: <span class="keri-str">"health"</span>,<br>&nbsp;&nbsp;<span class="keri-key">"ttl"</span>: <span class="keri-num">86400</span><br>}</div>
+                  </div>
+                  <div class="aside-card">
+                    <div class="aside-card-label">Principle in one line</div>
+                    <div class="aside-card-val large">If you can't verify it yourself, it isn't trust — it's hope.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- P4 -->
+        <article class="principle-card reveal" id="p4" style="transition-delay:0.10s">
+          <div class="principle-header" onclick="toggleCard(this)">
+            <div class="principle-num-badge">04</div>
+            <div class="principle-header-text">
+              <span class="principle-tag">Identity</span>
+              <h2>Identity is the root. <em>Everything else is built on top of it.</em></h2>
+              <p class="principle-summary">An agent without a verifiable identity isn't an agent — it's a process. Identity is not a feature to be added later. It's the first thing that must exist before any trustworthy action can be taken.</p>
+            </div>
+            <div class="principle-toggle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="principle-body">
+            <div class="principle-body-inner">
+              <div class="principle-content">
+                <div class="principle-prose">
+                  <p>KERI AIDs are self-certifying. The identifier itself — derived from the cryptographic material used to control it — carries its own proof of origin. There is no registration authority. No central directory. No dependency on DNS, PKI, or any infrastructure that can be compromised, abandoned, or politicised.</p>
+                  <p>For AI agents, this is transformative. Every agent gets a persistent, portable, verifiable identity from the moment of its instantiation. Every interaction that agent participates in — with humans, other agents, or services — is cryptographically attributed to that identity. <strong>Accountability becomes structural, not contractual.</strong></p>
+                  <p>This also means that when an agent's keys are compromised, rotation is deterministic. The pre-rotation commitment made at inception allows the agent to recover its identity without losing its history.</p>
+                  <div class="implications">
+                    <div class="implications-label">Implications</div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                      </div>
+                      <div class="implication-text">Self-certifying AIDs require no issuing authority
+                        <small>The AID's validity is proven by the cryptographic material alone.</small>
+                      </div>
+                    </div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.6"/></svg>
+                      </div>
+                      <div class="implication-text">Pre-rotation enables zero-trust key recovery
+                        <small>Next-key commitments at inception allow rotation without losing continuity.</small>
+                      </div>
+                    </div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                      </div>
+                      <div class="implication-text">Persistent identity across all ecosystem domains
+                        <small>One AID works across health, finance, community, and professional services.</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="principle-aside">
+                  <div class="aside-card">
+                    <div class="aside-card-label">Agent AID (Self-certifying)</div>
+                    <div class="aside-card-val">EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt</div>
+                  </div>
+                  <div class="aside-card">
+                    <div class="aside-card-label">Key event types</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--accent-dim);border:1px solid var(--accent-strong);color:var(--accent);padding:4px 9px;border-radius:6px;">icp</span>
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 9px;border-radius:6px;">rot</span>
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 9px;border-radius:6px;">ixn</span>
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 9px;border-radius:6px;">dip</span>
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 9px;border-radius:6px;">drt</span>
+                    </div>
+                  </div>
+                  <div class="aside-card">
+                    <div class="aside-card-label">Principle in one line</div>
+                    <div class="aside-card-val large">An agent's first act is to prove it exists. Everything after is built on that proof.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- P5 -->
+        <article class="principle-card reveal" id="p5" style="transition-delay:0.12s">
+          <div class="principle-header" onclick="toggleCard(this)">
+            <div class="principle-num-badge">05</div>
+            <div class="principle-header-text">
+              <span class="principle-tag">Authority</span>
+              <h2>Delegate carefully. <em>Authority is not a binary.</em></h2>
+              <p class="principle-summary">Giving an agent permission to act is not an all-or-nothing decision. Delegation should be scoped, time-limited, revocable, and traceable back to its human origin.</p>
+            </div>
+            <div class="principle-toggle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="principle-body">
+            <div class="principle-body-inner">
+              <div class="principle-content">
+                <div class="principle-prose">
+                  <p>KERI's delegation model uses <code style="font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--surface2);padding:2px 6px;border-radius:5px;">dip</code> (delegated inception) events to create child AIDs that operate under the authority of a parent AID. This creates a hierarchical trust chain that mirrors how organisations actually work: humans at the top, agents operating under human-granted authority at each level below.</p>
+                  <p>Crucially, delegation in KERI is <strong>bilateral</strong>. The delegated AID must commit to the delegator in its inception event, and the delegator must confirm the delegation in its own key event log. Neither party can claim delegation without the other's cryptographic commitment.</p>
+                  <p>This prevents the most dangerous failure mode in agentic systems: an agent that accumulates authority beyond what was intended, either through design or through prompt injection. The delegation chain is structural, not conversational.</p>
+                  <div class="implications">
+                    <div class="implications-label">Implications</div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><line x1="12" y1="8" x2="5" y2="16"/><line x1="12" y1="8" x2="19" y2="16"/></svg>
+                      </div>
+                      <div class="implication-text">dip/drt events create auditable delegation chains
+                        <small>Every grant of authority is recorded in both the delegator and delegatee KELs.</small>
+                      </div>
+                    </div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+                      </div>
+                      <div class="implication-text">Scope and TTL are credential-level constraints
+                        <small>ACDC credentials restrict what a delegated agent can do, not just who it is.</small>
+                      </div>
+                    </div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                      </div>
+                      <div class="implication-text">Revocation is instant and unilateral
+                        <small>The delegator can revoke at any time via rot event, with no agent cooperation required.</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="principle-aside">
+                  <div class="aside-card">
+                    <div class="aside-card-label">Delegation event — dip</div>
+                    <div class="keri-event"><span class="keri-key">"t"</span>: <span class="keri-str">"dip"</span>,<br><span class="keri-key">"di"</span>: <span class="keri-str">"EKE4g..."</span>,<br><span class="keri-key">"sn"</span>: <span class="keri-num">0</span>,<br><span class="keri-key">"scope"</span>: <span class="keri-str">"health"</span>,<br><span class="keri-key">"ttl"</span>: <span class="keri-num">86400</span></div>
+                  </div>
+                  <div class="aside-card">
+                    <div class="aside-card-label">Principle in one line</div>
+                    <div class="aside-card-val large">An agent's authority is exactly what was given to it. Not more. Proven, not assumed.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- P6 -->
+        <article class="principle-card reveal" id="p6" style="transition-delay:0.14s">
+          <div class="principle-header" onclick="toggleCard(this)">
+            <div class="principle-num-badge">06</div>
+            <div class="principle-header-text">
+              <span class="principle-tag">Composition</span>
+              <h2>Compose safely. <em>The ecosystem is the product.</em></h2>
+              <p class="principle-summary">The value of a verifiable agent OS isn't in any single agent — it's in the network of agents that can safely interact with each other because they share a common trust substrate.</p>
+            </div>
+            <div class="principle-toggle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="principle-body">
+            <div class="principle-body-inner">
+              <div class="principle-content">
+                <div class="principle-prose">
+                  <p>When two agents interact, neither should need to trust the other's operator. They need only verify each other's AID and the credentials attached to it. This is the same principle that makes HTTPS work across the entire internet — a shared cryptographic standard that lets unknown parties establish trust without prior relationship.</p>
+                  <p>selfdriven.computer extends this to agent-to-agent interaction via <strong>SKILL.MD protocols</strong>. Each agent advertises its capabilities as a structured, versioned document that other agents can verify. Composition of capabilities follows the same delegation model as authority — explicit, scoped, and auditable.</p>
+                  <p>The result is an ecosystem where composability is a security property, not just an engineering convenience. Safe composition means each participant knows exactly what they agreed to — and that agreement is recorded in the KEL.</p>
+                  <div class="implications">
+                    <div class="implications-label">Implications</div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20M12 2l10 10-10 10"/></svg>
+                      </div>
+                      <div class="implication-text">SKILL.MD defines the capability contract
+                        <small>Structured, versioned capability definitions that agents can verify before composing.</small>
+                      </div>
+                    </div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                      </div>
+                      <div class="implication-text">A2A interactions are KEL-anchored
+                        <small>Agent-to-agent agreements are recorded as interaction events in both parties' logs.</small>
+                      </div>
+                    </div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
+                      </div>
+                      <div class="implication-text">Domain isolation by design
+                        <small>Health agents cannot compose with finance capabilities unless explicit scope grants exist.</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="principle-aside">
+                  <div class="aside-card">
+                    <div class="aside-card-label">Ecosystem domains</div>
+                    <div style="display:flex;flex-direction:column;gap:5px;margin-top:4px;">
+                      <div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--muted);padding:5px 8px;background:var(--surface2);border-radius:7px;">selfdriven.health</div>
+                      <div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--muted);padding:5px 8px;background:var(--surface2);border-radius:7px;">selfdriven.money</div>
+                      <div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--muted);padding:5px 8px;background:var(--surface2);border-radius:7px;">selfdriven.network</div>
+                      <div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:600;padding:5px 8px;background:var(--accent-dim);border:1px solid var(--accent-strong);border-radius:7px;">selfdriven.computer ↗</div>
+                    </div>
+                  </div>
+                  <div class="aside-card">
+                    <div class="aside-card-label">Principle in one line</div>
+                    <div class="aside-card-val large">Interoperability without trust assumptions. The protocol is the guarantee.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- P7 -->
+        <article class="principle-card reveal" id="p7" style="transition-delay:0.16s">
+          <div class="principle-header" onclick="toggleCard(this)">
+            <div class="principle-num-badge">07</div>
+            <div class="principle-header-text">
+              <span class="principle-tag">Human agency</span>
+              <h2>Human in context. <em>Not human in the loop.</em></h2>
+              <p class="principle-summary">The goal is not to replace human judgment — it's to free humans from the tasks that don't require judgment, while ensuring they remain in genuine control of the ones that do.</p>
+            </div>
+            <div class="principle-toggle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="principle-body">
+            <div class="principle-body-inner">
+              <div class="principle-content">
+                <div class="principle-prose">
+                  <p>"Human in the loop" is often a euphemism for a human rubber-stamping agent decisions at high volume. The human sees a stream of requests, approves most of them, and provides a false sense of oversight. This is worse than no oversight — it creates accountability without attention.</p>
+                  <p>The Human Conductor model inverts this. <strong>Agents handle volume. Humans handle judgment.</strong> Each area of focus — from direction to accountability — has a human conductor who sets strategy, resolves exceptions, and governs the agent ecosystem that operates beneath them. Agents report upward; humans decide downward.</p>
+                  <p>Critically, the conductor's authority is cryptographically anchored. When a human makes a strategic decision that agents must respect, that decision is recorded as a KERI interaction event — signed by the human's passkey-linked AID. Agents cannot deviate from it without creating a verifiable discrepancy in their KEL.</p>
+                  <div class="implications">
+                    <div class="implications-label">Implications</div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                      </div>
+                      <div class="implication-text">8 Areas of Focus, each with a human conductor
+                        <small>Direction · Engagement · Enablement · Protocols · Sustainability · Processes · Accountability · Organisational</small>
+                      </div>
+                    </div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                      </div>
+                      <div class="implication-text">Passkey-linked AIDs anchor human decisions
+                        <small>Strategic decisions are signed with FIDO2/WebAuthn and recorded in the KEL.</small>
+                      </div>
+                    </div>
+                    <div class="implication-item">
+                      <div class="implication-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                      </div>
+                      <div class="implication-text">70/30 conductor focus model
+                        <small>Each conductor dedicates 70% to their primary area and 30% across supporting areas.</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="principle-aside">
+                  <div class="aside-card">
+                    <div class="aside-card-label">Human auth event — ixn</div>
+                    <div class="keri-event"><span class="keri-key">"t"</span>: <span class="keri-str">"ixn"</span>,<br><span class="keri-key">"aid"</span>: <span class="keri-str">"EKE4g..."</span>,<br><span class="keri-key">"sn"</span>: <span class="keri-num">7</span>,<br><span class="keri-key">"auth"</span>: <span class="keri-str">"passkey"</span>,<br><span class="keri-key">"decision"</span>: <span class="keri-str">"approve-scope"</span></div>
+                  </div>
+                  <div class="aside-card">
+                    <div class="aside-card-label">Principle in one line</div>
+                    <div class="aside-card-val large">Agents do the work. Humans set the direction. The KEL shows who decided what.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div><!-- /principles-list -->
+    </div><!-- /layout -->
+
+    <!-- Closing: three synthesis cards -->
+    <div class="closing-section">
+      <div class="container">
+        <div class="section-header" style="margin-bottom:40px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+            <span style="width:24px;height:2px;background:var(--accent);border-radius:2px;display:block;"></span>
+            Synthesis
+          </div>
+          <h2 class="reveal" style="font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-0.04em;line-height:1.05;max-width:700px;">
+            These principles are a system.<br>Each one <em style="font-style:normal;color:var(--accent)">reinforces</em> the others.
+          </h2>
+        </div>
+        <div class="closing-grid">
+          <div class="closing-card reveal" style="transition-delay:0.06s">
+            <div class="closing-card-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <h3>The clock makes proofs durable</h3>
+            <p>Without sequenced time, proofs are snapshots. With a verifiable clock, proofs have position in history. You can always ask: when was this signed, and what came before and after it?</p>
+          </div>
+          <div class="closing-card reveal" style="transition-delay:0.10s">
+            <div class="closing-card-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <h3>Identity makes delegation meaningful</h3>
+            <p>Delegation without identity is just configuration. When the delegator and delegatee each have verifiable identities, delegation becomes a cryptographic contract — not a setting that can be quietly overridden.</p>
+          </div>
+          <div class="closing-card reveal" style="transition-delay:0.14s">
+            <div class="closing-card-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <h3>Humans anchor the whole stack</h3>
+            <p>Every trust chain in the system terminates at a human AID. Agents operate with delegated authority; humans hold the root. The conductor model ensures that authority and accountability remain co-located.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- CTA strip -->
+  <div class="cta-strip">
+    <div class="container cta-strip-inner">
+      <h2>Ready to explore the <em>architecture?</em></h2>
+      <div class="cta-strip-actions">
+        <a class="btn btn-primary" href="selfdriven_computer_homepage_v2.html#architecture">View architecture</a>
+        <a class="btn btn-ghost" href="selfdriven_computer_homepage_v2.html">Back to overview</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-inner">
+      <a href="selfdriven_computer_homepage_v2.html" class="footer-brand">
+        <div class="footer-logo"></div>
+        <span class="footer-name">selfdriven.computer</span>
+      </a>
+      <div class="footer-copy">selfdriven Foundation — concept document</div>
+      <div class="footer-links">
+        <a href="https://selfdriven.foundation">Foundation</a>
+        <a href="https://selfdriven.ai">AI</a>
+        <a href="https://selfdriven.network">Network</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+    reveals.forEach(el => revealObs.observe(el));
+
+    // Trigger header reveals immediately
+    setTimeout(() => {
+      document.querySelectorAll('.page-header .reveal, .sidebar.reveal').forEach(el => el.classList.add('visible'));
+    }, 80);
+
+    // Card toggle
+    function toggleCard(headerEl) {
+      const card = headerEl.closest('.principle-card');
+      const body = card.querySelector('.principle-body');
+      const isOpen = card.classList.contains('open');
+      if (isOpen) {
+        card.classList.remove('open');
+        body.style.maxHeight = '0';
+      } else {
+        card.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+      }
+      updateSidebar();
+    }
+
+    // Sidebar navigation
+    const sidebarItems = document.querySelectorAll('.sidebar-item[data-target]');
+    sidebarItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const target = document.getElementById(item.dataset.target);
+        if (!target) return;
+        // Open the card
+        const body = target.querySelector('.principle-body');
+        target.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+        // Scroll
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 60);
+        updateSidebar();
+      });
+    });
+
+    function updateSidebar() {
+      sidebarItems.forEach(item => {
+        const card = document.getElementById(item.dataset.target);
+        item.classList.toggle('active', card && card.classList.contains('open'));
+      });
+      updateProgress();
+    }
+
+    // Reading progress bar
+    function updateProgress() {
+      const cards = document.querySelectorAll('.principle-card');
+      const open = document.querySelectorAll('.principle-card.open').length;
+      const pct = (open / cards.length) * 100;
+      document.getElementById('progress-fill').style.width = pct + '%';
+    }
+
+    // Scroll-based sidebar highlight
+    const cardEls = document.querySelectorAll('.principle-card');
+    window.addEventListener('scroll', () => {
+      let closest = null, closestDist = Infinity;
+      cardEls.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const dist = Math.abs(rect.top - 120);
+        if (dist < closestDist) { closestDist = dist; closest = card; }
+      });
+      if (closest) {
+        sidebarItems.forEach(item => {
+          item.classList.toggle('active', item.dataset.target === closest.id);
+        });
+      }
+      // Global reading progress (scroll depth)
+      const doc = document.documentElement;
+      const scrolled = (doc.scrollTop || document.body.scrollTop) / (doc.scrollHeight - doc.clientHeight);
+      document.getElementById('progress-fill').style.width = (scrolled * 100) + '%';
+    }, { passive: true });
+
+    // Init — first card open
+    const firstCard = document.querySelector('.principle-card.open');
+    if (firstCard) {
+      const firstBody = firstCard.querySelector('.principle-body');
+      firstBody.style.maxHeight = firstBody.scrollHeight + 'px';
+    }
+    updateProgress();
+  </script>
+
+</body>
+</html>
