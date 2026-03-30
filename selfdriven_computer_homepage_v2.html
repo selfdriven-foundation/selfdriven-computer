@@ -84,19 +84,12 @@
     .nav-brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 0;
       text-decoration: none;
     }
     .nav-logo {
-      width: 32px; height: 32px;
-      background: var(--accent);
-      border-radius: 9px;
       display: flex; align-items: center; justify-content: center;
-      color: white;
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      flex-shrink: 0;
+      background: transparent;
     }
     .nav-name {
       font-size: 15px;
@@ -573,13 +566,12 @@
     .footer-brand {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 0;
       text-decoration: none;
     }
     .footer-logo {
-      width: 20px; height: 20px;
-      background: var(--accent);
-      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      background: transparent;
     }
     .footer-name {
       font-size: 13px;
@@ -634,14 +626,12 @@
   <nav id="nav">
     <div class="container nav-inner">
       <a href="/" class="nav-brand">
-        <div class="nav-logo">sd</div>
-        <span class="nav-name">selfdriven.computer</span>
+        <div class="nav-logo"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjAiIHk9IjAiIHdpZHRoPSIyMzAwIiBoZWlnaHQ9IjQ0MCIgdmlld0JveD0iMCwgMCwgMjMwMCwgNDQwIj4KICA8ZyBpZD0iTGF5ZXJfMSI+CiAgICA8cGF0aCBkPSJNNy4xMzYsMTIzLjcxNiBMMTMxLjM2NywtMC41MTQgTDEzMS4zNjcsMTIzLjcxNiBMNy4xMzYsMjQ3Ljk0NyBMNy4xMzYsMTIzLjcxNiB6IE0xMzMuMjM1LDMzOS40ODYgTDcuMTM2LDMzOS40ODYgTDI1Ni41MzEsOTAuMDkgTDI1Ni41MzEsMjE2LjE4OSBMMTMzLjIzNSwzMzkuNDg2IHogTTIyOC41MDksMzM4LjU1MiBMMzUwLjg3MiwyMTYuMTg5IEwzNTAuODcyLDMzOC41NTIgTDIyOC41MDksMzM4LjU1MiB6IiBmaWxsPSIjREU1QTMxIi8+CiAgICA8dGV4dCB0cmFuc2Zvcm09Im1hdHJpeCgxLCAwLCAwLCAxLCAxNjM3LjU2OCwgMzExKSI+CiAgICAgIDx0c3BhbiB4PSItMTI0Mi40MzIiIHk9IjI5IiBmb250LWZhbWlseT0iQnJvY2ttYW5uLU1lZGl1bSIgZm9udC1zaXplPSI0MDAiIGZpbGw9IiNERTVBMzEiPmNvbXB1dGVyPC90c3Bhbj4KICAgIDwvdGV4dD4KICA8L2c+Cjwvc3ZnPgo=" alt="selfdriven.computer" style="width:auto;height:44px;max-height:44px;display:block;background:transparent;"></div>
       </a>
       <div class="nav-links">
         <a href="#principles">Principles</a>
         <a href="#architecture">Architecture</a>
         <a href="#why">Why it matters</a>
-        <a class="nav-cta" href="#contact">Get in touch</a>
       </div>
     </div>
   </nav>
@@ -981,8 +971,7 @@
   <footer>
     <div class="container footer-inner">
       <a href="/" class="footer-brand">
-        <div class="footer-logo"></div>
-        <span class="footer-name">selfdriven.computer</span>
+        <div class="footer-logo"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjAiIHk9IjAiIHdpZHRoPSIyMzAwIiBoZWlnaHQ9IjQ0MCIgdmlld0JveD0iMCwgMCwgMjMwMCwgNDQwIj4KICA8ZyBpZD0iTGF5ZXJfMSI+CiAgICA8cGF0aCBkPSJNNy4xMzYsMTIzLjcxNiBMMTMxLjM2NywtMC41MTQgTDEzMS4zNjcsMTIzLjcxNiBMNy4xMzYsMjQ3Ljk0NyBMNy4xMzYsMTIzLjcxNiB6IE0xMzMuMjM1LDMzOS40ODYgTDcuMTM2LDMzOS40ODYgTDI1Ni41MzEsOTAuMDkgTDI1Ni41MzEsMjE2LjE4OSBMMTMzLjIzNSwzMzkuNDg2IHogTTIyOC41MDksMzM4LjU1MiBMMzUwLjg3MiwyMTYuMTg5IEwzNTAuODcyLDMzOC41NTIgTDIyOC41MDksMzM4LjU1MiB6IiBmaWxsPSIjREU1QTMxIi8+CiAgICA8dGV4dCB0cmFuc2Zvcm09Im1hdHJpeCgxLCAwLCAwLCAxLCAxNjM3LjU2OCwgMzExKSI+CiAgICAgIDx0c3BhbiB4PSItMTI0Mi40MzIiIHk9IjI5IiBmb250LWZhbWlseT0iQnJvY2ttYW5uLU1lZGl1bSIgZm9udC1zaXplPSI0MDAiIGZpbGw9IiNERTVBMzEiPmNvbXB1dGVyPC90c3Bhbj4KICAgIDwvdGV4dD4KICA8L2c+Cjwvc3ZnPgo=" alt="selfdriven.computer" style="width:auto;height:24px;max-height:24px;display:block;background:transparent;"></div>
       </a>
       <div class="footer-copy">Concept homepage — selfdriven Foundation ecosystem</div>
       <div class="footer-links">
