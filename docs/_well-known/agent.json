@@ -1,0 +1,324 @@
+{
+  "schemaVersion": "1.0",
+  "name": "selfdriven.codes",
+  "displayName": "selfdriven.codes Trust Agent",
+  "description": "Human trust infrastructure agent. Generates unique trust-establishment codes, binds them cryptographically to KERI AIDs and ACDC session credentials, and orchestrates delivery through a distributed network of trusted human couriers. Establishes root trust between humans across compromised digital channels.",
+  "version": "0.1.0",
+  "agent": {
+    "id": "selfdriven.codes",
+    "domain": "selfdriven.codes",
+    "url": "https://selfdriven.codes",
+    "aid": "EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt",
+    "delegationParent": "selfdriven.foundation",
+    "category": "trust-infrastructure",
+    "tags": [
+      "trust",
+      "identity",
+      "out-of-band",
+      "human-courier",
+      "keri",
+      "acdc",
+      "root-of-trust",
+      "synthetic-reality",
+      "anti-impersonation"
+    ]
+  },
+  "ecosystem": {
+    "parent": "selfdriven.foundation",
+    "institute": "selfdriven.institute",
+    "siblings": [
+      "selfdriven.money",
+      "selfdriven.services",
+      "selfdriven.health",
+      "selfdriven.pro",
+      "selfdriven.network"
+    ]
+  },
+  "identity": {
+    "model": "keri-acdc",
+    "aid": "EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt",
+    "witnesses": 3,
+    "witnessThreshold": 2,
+    "preRotation": true,
+    "passkeyBinding": true,
+    "credentialFramework": "ACDC",
+    "anchoring": "cardano",
+    "vleiIntegration": true
+  },
+  "authentication": {
+    "userAuth": "fido2-passkey",
+    "serviceAuth": "mtls+keri-bearer",
+    "transactionSigning": "webauthn-with-data-binding",
+    "noPasswords": true,
+    "noSmsOtp": true
+  },
+  "capabilities": [
+    {
+      "id": "code.generate",
+      "name": "Generate trust code",
+      "description": "Generate a human-readable trust code bound to a session SAID and KERI AID",
+      "input": {
+        "format": ["phrase", "alphanumeric"],
+        "binding": ["session", "identity"],
+        "ttlSeconds": "integer (default 300, max 3600)",
+        "boundToAid": "KERI AID of the initiator",
+        "sessionRef": "optional session reference string"
+      },
+      "output": {
+        "code": "string (e.g. EMBER-RIVER-91)",
+        "said": "self-addressing identifier",
+        "expiresAt": "ISO 8601 timestamp",
+        "keriEvent": "ixn event in initiator KEL"
+      }
+    },
+    {
+      "id": "code.verify",
+      "name": "Verify trust code",
+      "description": "Verify a code against its SAID, session binding, and TTL",
+      "input": {
+        "code": "trust code string",
+        "said": "session SAID to verify against"
+      },
+      "output": {
+        "valid": "boolean",
+        "boundToAid": "string",
+        "expiresAt": "ISO 8601 timestamp",
+        "courierPath": "array of courier AIDs that handled this code"
+      }
+    },
+    {
+      "id": "code.rotate",
+      "name": "Rotate trust code",
+      "description": "Issue a fresh code for an existing session — invalidates the previous code",
+      "input": {
+        "said": "session SAID"
+      },
+      "output": {
+        "code": "new trust code",
+        "said": "new SAID",
+        "previousSaid": "invalidated SAID",
+        "keriEvent": "ixn event"
+      }
+    },
+    {
+      "id": "dispatch.create",
+      "name": "Dispatch code via courier",
+      "description": "Request delivery of a trust code through a human courier pathway",
+      "input": {
+        "said": "code SAID to dispatch",
+        "recipientAid": "KERI AID of intended recipient",
+        "deliveryModel": ["physical", "relay", "split_trust", "proximity", "community"],
+        "courierType": ["community", "licensed_professional", "governance", "organisation"],
+        "location": "optional geographic constraint",
+        "urgency": ["standard", "urgent", "diplomatic"]
+      },
+      "output": {
+        "dispatchId": "string",
+        "state": "pending | assigned | acknowledged | in_transit | delivered | verified | disputed",
+        "courierAid": "assigned courier AID (once available)",
+        "estimatedDelivery": "ISO 8601 timestamp",
+        "keriEvent": "ixn event in dispatch KEL"
+      }
+    },
+    {
+      "id": "dispatch.status",
+      "name": "Check dispatch status",
+      "description": "Retrieve current state of a courier dispatch",
+      "input": {
+        "dispatchId": "string"
+      },
+      "output": {
+        "state": "string",
+        "courier": "courier AID and profile",
+        "trail": "array of state transitions with timestamps and ixn events"
+      }
+    },
+    {
+      "id": "courier.discover",
+      "name": "Discover available couriers",
+      "description": "Find couriers matching delivery requirements",
+      "input": {
+        "type": "courier type",
+        "location": "optional geographic filter",
+        "minReputation": "optional reputation threshold",
+        "credentialRequirements": "optional ACDC credential schemas"
+      },
+      "output": {
+        "couriers": "array of courier profiles with AIDs, credentials, reputation, availability"
+      }
+    },
+    {
+      "id": "courier.attest",
+      "name": "Attest to courier interaction",
+      "description": "Record an attestation about a courier after a delivery — feeds the reputation layer",
+      "input": {
+        "courierAid": "string",
+        "dispatchId": "string",
+        "outcome": ["verified", "failed", "disputed"],
+        "notes": "optional string"
+      },
+      "output": {
+        "attestationSaid": "string",
+        "keriEvent": "ixn event"
+      }
+    }
+  ],
+  "endpoints": {
+    "base": "https://api.selfdriven.codes/v1",
+    "codes": {
+      "generate": "POST /codes",
+      "verify": "GET /codes/:said",
+      "rotate": "POST /codes/:said/rotate",
+      "invalidate": "DELETE /codes/:said"
+    },
+    "dispatch": {
+      "create": "POST /dispatch",
+      "status": "GET /dispatch/:id",
+      "confirm": "POST /dispatch/:id/confirm",
+      "verify": "POST /dispatch/:id/verify"
+    },
+    "couriers": {
+      "list": "GET /couriers",
+      "profile": "GET /couriers/:aid",
+      "attest": "POST /couriers/:aid/attestation"
+    },
+    "identity": {
+      "aid": "GET /identity/aid",
+      "kel": "GET /identity/kel",
+      "credentials": "GET /identity/credentials"
+    },
+    "health": "GET /health",
+    "wellKnown": "GET /.well-known/agent.json"
+  },
+  "codeFormats": {
+    "phrase": {
+      "pattern": "ADJECTIVE-NOUN-NUM",
+      "examples": [
+        "EMBER-RIVER-91",
+        "ORBIT-LANTERN-482",
+        "SOLAR-FOREST-229",
+        "AURORA-HARBOR-17",
+        "DELTA-COMPASS-803"
+      ],
+      "wordListDiscipline": {
+        "minWordLength": 6,
+        "noHomophones": true,
+        "concreteTerms": true,
+        "noProperNouns": true
+      }
+    },
+    "alphanumeric": {
+      "pattern": "XXXX-XXXX-XXXX",
+      "charset": "ABCDEFGHJKLMNPQRSTUVWXYZ23456789",
+      "excludesAmbiguous": ["I", "O", "0", "1"],
+      "examples": ["K3PM-7VQR-2J9X", "BNHT-4FYZ-8MCK"]
+    }
+  },
+  "trustModel": {
+    "layers": [
+      { "id": 1, "name": "Cryptographic", "function": "Code generation, session SAID binding, signature integrity" },
+      { "id": 2, "name": "Identity", "function": "KERI AIDs, ACDC role credentials, KEL continuity" },
+      { "id": 3, "name": "Courier", "function": "Human transport — physical, relay, split-trust, proximity, community" },
+      { "id": 4, "name": "Reputation", "function": "Courier trust scoring, interaction histories, Cardano anchoring" },
+      { "id": 5, "name": "Session", "function": "Temporary interaction trust, replay prevention via TTL" },
+      { "id": 6, "name": "Governance", "function": "Rules, delegation, append-only ixn audit trails" }
+    ],
+    "courierTypes": [
+      { "code": "01", "name": "Community Members", "description": "Verified neighbourhood participants with established local reputation" },
+      { "code": "02", "name": "Licensed Professionals", "description": "Notaries, solicitors, accredited agents with ACDC credentials, often anchored to GLEIF vLEI" },
+      { "code": "03", "name": "Governance Participants", "description": "Members of validated trust networks with cryptographic attestations" },
+      { "code": "04", "name": "Organisation Representatives", "description": "Designated trust officers under KERI-delegated AIDs with scoped, time-limited authority" }
+    ],
+    "deliveryModels": [
+      { "id": "physical", "name": "Physical delivery", "description": "Courier physically provides the code in person — highest assurance" },
+      { "id": "relay", "name": "Relay delivery", "description": "Code transferred through a chain of trusted intermediaries" },
+      { "id": "split_trust", "name": "Split trust", "description": "Multiple couriers deliver fragments; no single courier holds the full code" },
+      { "id": "proximity", "name": "Proximity", "description": "Codes exchanged only within geographic boundaries — geofenced trust" },
+      { "id": "community", "name": "Community", "description": "Trusted local organisations act as delivery nodes" }
+    ]
+  },
+  "governance": {
+    "framework": "selfdriven 8 Areas of Focus",
+    "areas": [
+      { "id": "01", "name": "Direction", "context": "Trust primitive strategy, courier network expansion roadmap" },
+      { "id": "02", "name": "Engagement", "context": "Courier onboarding, trust community building, institutional partnerships" },
+      { "id": "03", "name": "Enablement", "context": "Courier training, integration SDKs, verification rituals education" },
+      { "id": "04", "name": "Protocols", "context": "KERI/ACDC integration, code format standards, courier credential schemas" },
+      { "id": "05", "name": "Sustainability", "context": "Courier compensation model, transaction-based revenue, network economics" },
+      { "id": "06", "name": "Processes", "context": "Code generation, dispatch workflows, verification ceremonies, audit" },
+      { "id": "07", "name": "Accountability", "context": "Append-only KEL audit trails, courier reputation, dispute resolution" },
+      { "id": "08", "name": "Organisational", "context": "Distributed courier governance, trust officer structure, regional nodes" }
+    ],
+    "conductorModel": "human-conductor",
+    "humanDecisionPoints": [
+      "courier-assignment-for-diplomatic-tier",
+      "dispute-resolution",
+      "reputation-threshold-changes",
+      "delivery-model-policy",
+      "credential-schema-evolution"
+    ]
+  },
+  "delegation": {
+    "model": "keri-dip",
+    "parentAid": "selfdriven.foundation",
+    "scope": [
+      "code.generate",
+      "code.verify",
+      "code.rotate",
+      "dispatch.create",
+      "dispatch.status",
+      "courier.discover"
+    ],
+    "restrictedScope": [
+      "courier.attest",
+      "credential.issue",
+      "reputation.adjust"
+    ],
+    "timeLimit": "PT24H",
+    "rotationSchedule": "weekly"
+  },
+  "publications": [
+    {
+      "title": "Out-of-Band Human Trust Establishment in the Age of Synthetic Reality",
+      "url": "https://selfdriven.institute/paper/out-of-band-human-trust-establishment",
+      "publisher": "selfdriven Institute",
+      "role": "theoretical-foundation"
+    },
+    {
+      "title": "Human Courier Networks for Root Trust Delivery",
+      "url": "https://selfdriven.institute/paper/human-courier-networks-for-root-trust-delivery",
+      "publisher": "selfdriven Institute",
+      "role": "delivery-infrastructure"
+    }
+  ],
+  "compliance": {
+    "standards": [
+      "KERI",
+      "ACDC",
+      "vLEI / GLEIF",
+      "FIDO2 / WebAuthn",
+      "ISO 27001:2022"
+    ],
+    "regulatoryContext": "Australian Privacy Act, APRA CPS 234 (when integrated with selfdriven.money)",
+    "auditTrail": "append-only KERI key event log, witnessed, anchored to Cardano"
+  },
+  "skill": {
+    "location": "/mnt/skills/user/selfdriven-codes/SKILL.md",
+    "dependsOn": [
+      "selfdriven-ecosystem"
+    ]
+  },
+  "contact": {
+    "team": "team@selfdriven.codes",
+    "trust": "trust@selfdriven.codes",
+    "couriers": "couriers@selfdriven.codes",
+    "institute": "institute@selfdriven.foundation"
+  },
+  "metadata": {
+    "created": "2026-05-17",
+    "updatedAt": "2026-05-17",
+    "region": "ap-southeast-2",
+    "timezone": "Australia/Sydney",
+    "language": "en-AU"
+  }
+}

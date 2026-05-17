@@ -1,0 +1,20 @@
+title: "selfdriven Computer"
+description: ""
+baseurl: ""
+url: ""
+context: "computer"
+repo: "selfdriven-foundation/selfdriven-computer"
+
+defaults:
+  - scope:
+      path: "pages"
+      type: "pages"
+    values:
+      layout: selfdriven
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+exclude:
+  - _well-known/
