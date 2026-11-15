@@ -4,1238 +4,253 @@ title: selfdriven Computer
 permalink: /paper/computer-based-reality
 ---
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>selfdriven.computer — Compute-Based Reality</title>
-<meta name="description" content="Reality is not made within computation. Reality is computation. selfdriven.computer explores Compute-Based Reality (CBR) and gravity as arbitrage between realities.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-<style>
-:root {
-  --bg: #f5f2ed;
-  --surface: #edeae3;
-  --surface2: #e5e1d8;
-  --border: #ddd8ce;
-  --text: #1a1410;
-  --muted: #6b5f52;
-  --muted2: #9e9085;
-  --accent: #c8442f;
-  --accent-dim: rgba(200, 68, 47, 0.10);
-  --accent-strong: rgba(200, 68, 47, 0.18);
-  --card-radius: 20px;
-  --shadow: 0 2px 16px rgba(0,0,0,0.07);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0a0a0a;
-    --surface: #161616;
-    --surface2: #1e1e1e;
-    --border: #2a2a2a;
-    --text: #f0ede8;
-    --muted: #b0a89e;
-    --muted2: #7a7268;
-    --accent: #e85d4a;
-    --accent-dim: rgba(232, 93, 74, 0.12);
-    --accent-strong: rgba(232, 93, 74, 0.20);
-    --shadow: 0 2px 16px rgba(0,0,0,0.4);
-  }
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'Poppins', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 32px;
-}
-
-/* ============ NAV ============ */
-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  padding: 18px 32px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  background: rgba(245, 242, 237, 0.7);
-  border-bottom: 1px solid transparent;
-  transition: all 0.3s ease;
-}
-
-@media (prefers-color-scheme: dark) {
-  nav { background: rgba(10, 10, 10, 0.7); }
-}
-
-nav.scrolled {
-  border-bottom-color: var(--border);
-}
-
-.nav-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.nav-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  color: var(--text);
-}
-
-.nav-mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 800;
-  font-size: 14px;
-  letter-spacing: -0.04em;
-}
-
-.nav-brand-text {
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  font-size: 15px;
-}
-
-.nav-brand-text em {
-  color: var(--accent);
-  font-style: normal;
-  font-weight: 800;
-}
-
-.nav-links {
-  display: flex;
-  gap: 32px;
-  align-items: center;
-}
-
-.nav-links a {
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-
-.nav-links a:hover { color: var(--text); }
-
-.nav-cta {
-  background: var(--accent);
-  color: white !important;
-  padding: 9px 20px;
-  border-radius: 999px;
-  font-weight: 600 !important;
-  transition: transform 0.2s, opacity 0.2s !important;
-}
-
-.nav-cta:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-@media (max-width: 768px) {
-  .nav-links { display: none; }
-  .nav-links.cta-only { display: flex; }
-  .nav-links.cta-only a:not(.nav-cta) { display: none; }
-}
-
-/* ============ HERO ============ */
-.hero {
-  min-height: 100vh;
-  padding: 140px 0 80px;
-  display: flex;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.4;
-  z-index: 0;
-}
-
-.hero-bg svg {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-.hero-inner {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-}
-
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 28px;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp 0.8s ease forwards;
-}
-
-.eyebrow-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-h1.hero-title {
-  font-size: clamp(44px, 7vw, 88px);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.02;
-  max-width: 1000px;
-  margin-bottom: 32px;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: fadeUp 1s 0.2s ease forwards;
-}
-
-h1.hero-title em {
-  color: var(--accent);
-  font-style: normal;
-}
-
-.hero-lede {
-  font-size: clamp(18px, 2vw, 22px);
-  color: var(--muted);
-  max-width: 720px;
-  line-height: 1.55;
-  margin-bottom: 48px;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: fadeUp 1s 0.4s ease forwards;
-}
-
-.hero-cta-row {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: fadeUp 1s 0.6s ease forwards;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 16px 32px;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 15px;
-  text-decoration: none;
-  transition: all 0.2s;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-.btn-primary {
-  background: var(--accent);
-  color: white;
-}
-
-.btn-primary:hover {
-  opacity: 0.92;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px var(--accent-strong);
-}
-
-.btn-outline {
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--border);
-}
-
-.btn-outline:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-@keyframes fadeUp {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ============ THESIS BLOCK ============ */
-.thesis {
-  padding: 100px 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-}
-
-.thesis-grid {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 80px;
-  align-items: start;
-}
-
-@media (max-width: 900px) {
-  .thesis-grid { grid-template-columns: 1fr; gap: 40px; }
-}
-
-.thesis-label {
-  position: sticky;
-  top: 120px;
-}
-
-.thesis-statement {
-  font-size: clamp(28px, 3.5vw, 44px);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.2;
-}
-
-.thesis-statement .strike {
-  display: block;
-  color: var(--muted2);
-  text-decoration: line-through;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 2px;
-  margin-bottom: 16px;
-  font-weight: 500;
-}
-
-.thesis-statement .truth {
-  color: var(--text);
-}
-
-.thesis-statement .truth em {
-  color: var(--accent);
-  font-style: normal;
-}
-
-/* ============ EVOLUTION TIMELINE ============ */
-.evolution {
-  padding: 100px 0;
-}
-
-.section-header {
-  margin-bottom: 64px;
-  max-width: 720px;
-}
-
-.section-header h2 {
-  font-size: clamp(32px, 4.5vw, 56px);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  margin-bottom: 20px;
-}
-
-.section-header h2 em {
-  color: var(--accent);
-  font-style: normal;
-}
-
-.section-header p {
-  font-size: 18px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-.evolution-track {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 16px;
-}
-
-@media (max-width: 900px) {
-  .evolution-track { grid-template-columns: repeat(2, 1fr); }
-}
-
-.evolution-step {
-  padding: 24px 20px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--card-radius);
-  position: relative;
-  transition: all 0.3s;
-}
-
-.evolution-step::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--accent);
-  border-radius: var(--card-radius) var(--card-radius) 0 0;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.evolution-step:hover::before { opacity: 1; }
-.evolution-step:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-
-.evolution-step.current::before { opacity: 1; }
-.evolution-step.current {
-  background: var(--accent-dim);
-  border-color: var(--accent);
-}
-
-.evolution-era {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted2);
-  margin-bottom: 12px;
-}
-
-.evolution-step.current .evolution-era { color: var(--accent); }
-
-.evolution-model {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text);
-  letter-spacing: -0.01em;
-}
-
-/* ============ MAPPING SECTION ============ */
-.mapping {
-  padding: 100px 0;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.mapping-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-
-@media (max-width: 900px) {
-  .mapping-grid { grid-template-columns: 1fr; }
-}
-
-.mapping-card {
-  padding: 32px 28px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--card-radius);
-  position: relative;
-  transition: all 0.3s;
-}
-
-.mapping-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--accent);
-  border-radius: var(--card-radius) var(--card-radius) 0 0;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.mapping-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-.mapping-card:hover::before { opacity: 1; }
-
-.mapping-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: var(--accent-dim);
-  color: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.mapping-from {
-  font-size: 13px;
-  color: var(--muted);
-  margin-bottom: 8px;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.mapping-arrow {
-  color: var(--accent);
-  font-weight: 700;
-  margin: 0 8px;
-}
-
-.mapping-to {
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text);
-  margin-bottom: 12px;
-}
-
-.mapping-desc {
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.55;
-}
-
-/* ============ GRAVITY SECTION ============ */
-.gravity {
-  padding: 120px 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.gravity-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
-}
-
-@media (max-width: 900px) {
-  .gravity-inner { grid-template-columns: 1fr; gap: 48px; }
-}
-
-.gravity-visual {
-  position: relative;
-  aspect-ratio: 1;
-  max-width: 480px;
-  margin: 0 auto;
-}
-
-.gravity-svg {
-  width: 100%;
-  height: 100%;
-}
-
-.gravity-text h2 {
-  font-size: clamp(32px, 4vw, 52px);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  margin-bottom: 24px;
-}
-
-.gravity-text h2 em {
-  color: var(--accent);
-  font-style: normal;
-}
-
-.gravity-text p {
-  font-size: 17px;
-  color: var(--muted);
-  line-height: 1.7;
-  margin-bottom: 20px;
-}
-
-.gravity-pull {
-  display: block;
-  padding: 24px 28px;
-  background: var(--accent-dim);
-  border-left: 3px solid var(--accent);
-  border-radius: 0 12px 12px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text);
-  letter-spacing: -0.01em;
-  line-height: 1.4;
-  margin-top: 32px;
-}
-
-/* ============ CONCEPTS GRID ============ */
-.concepts {
-  padding: 100px 0;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-}
-
-.concepts-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-}
-
-@media (max-width: 900px) {
-  .concepts-grid { grid-template-columns: 1fr; }
-}
-
-.concept-card {
-  padding: 36px 32px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--card-radius);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s;
-}
-
-.concept-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--accent);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.concept-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-.concept-card:hover::before { opacity: 1; }
-
-.concept-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--accent);
-  margin-bottom: 16px;
-  letter-spacing: 0.08em;
-}
-
-.concept-card h3 {
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 14px;
-  line-height: 1.15;
-}
-
-.concept-card p {
-  font-size: 15px;
-  color: var(--muted);
-  line-height: 1.65;
-}
-
-/* ============ SELFDRIVEN PARALLELS ============ */
-.parallels {
-  padding: 120px 0;
-}
-
-.parallels-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 48px;
-}
-
-.parallels-table tr {
-  border-bottom: 1px solid var(--border);
-  transition: background 0.2s;
-}
-
-.parallels-table tr:hover {
-  background: var(--surface);
-}
-
-.parallels-table td {
-  padding: 22px 8px;
-  vertical-align: middle;
-}
-
-.parallels-from {
-  font-weight: 600;
-  font-size: 17px;
-  letter-spacing: -0.01em;
-  width: 45%;
-}
-
-.parallels-arrow {
-  width: 10%;
-  text-align: center;
-  color: var(--accent);
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 700;
-}
-
-.parallels-to {
-  font-size: 15px;
-  color: var(--muted);
-  width: 45%;
-}
-
-/* ============ CTA ============ */
-.cta {
-  padding: 120px 0;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-}
-
-.cta-card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--card-radius);
-  padding: 64px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.cta-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--accent);
-}
-
-@media (max-width: 600px) { .cta-card { padding: 40px 24px; } }
-
-.cta h2 {
-  font-size: clamp(28px, 4vw, 44px);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  margin-bottom: 20px;
-}
-
-.cta h2 em {
-  color: var(--accent);
-  font-style: normal;
-}
-
-.cta p {
-  font-size: 17px;
-  color: var(--muted);
-  max-width: 520px;
-  margin: 0 auto 36px;
-  line-height: 1.6;
-}
-
-.cta-row {
-  display: flex;
-  gap: 14px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-/* ============ FOOTER ============ */
-footer {
-  padding: 60px 0 40px;
-  border-top: 1px solid var(--border);
-}
-
-.footer-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 24px;
-}
-
-.footer-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.footer-mark {
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
-  background: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 800;
-  font-size: 11px;
-}
-
-.footer-text {
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.footer-links {
-  display: flex;
-  gap: 24px;
-}
-
-.footer-links a {
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 13px;
-  transition: color 0.2s;
-}
-
-.footer-links a:hover { color: var(--accent); }
-
-/* Scroll reveal */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* SVG decorative animations */
-@keyframes orbit-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes orbit-rev {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
-}
-
-.orbit-1 { animation: orbit-slow 60s linear infinite; transform-origin: center; }
-.orbit-2 { animation: orbit-rev 90s linear infinite; transform-origin: center; }
-.orbit-3 { animation: orbit-slow 120s linear infinite; transform-origin: center; }
-
-@keyframes drift {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(8px, -8px); }
-}
-
-.drift { animation: drift 6s ease-in-out infinite; }
-
-</style>
+	<meta charset="UTF-8" />
+	<title>selfdriven.computer — Compute-Based Reality</title>
+	<meta name="description" content="Reality is not made within computation. Reality is computation. selfdriven.computer explores Compute-Based Reality (CBR) and gravity as arbitrage between realities."/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+	<meta property="og:title" content="Compute-Based Reality — selfdriven.computer" />
+	<meta property="og:description" content="Reality is not made within computation. Reality is computation. selfdriven.computer explores Compute-Based Reality (CBR) and gravity as arbitrage between realities." />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="/assets/css/computer.css" />
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
-<!-- ============ NAV ============ -->
-<nav id="nav">
-  <div class="nav-inner">
-    <a href="#" class="nav-brand">
-      <div class="nav-mark">sd</div>
-      <span class="nav-brand-text">selfdriven<em>.computer</em></span>
-    </a>
-    <div class="nav-links">
-      <a href="#thesis">Thesis</a>
-      <a href="#mapping">Mapping</a>
-      <a href="#gravity">Gravity</a>
-      <a href="#concepts">Concepts</a>
-      <a href="#paper" class="nav-cta">Read paper</a>
-    </div>
-    <div class="nav-links cta-only">
-      <a href="#paper" class="nav-cta">Paper</a>
-    </div>
-  </div>
-</nav>
+<header class="header">
+	<a class="logo" href="/"><img src="/assets/img/selfdriven-logo-computer-flamingo-transparent.png" alt="selfdriven.computer" width="214" height="40"></a>
+	<nav class="nav" aria-label="Main">
+		<a href="/paper/computer-based-reality" aria-current="page">Paper</a>
+		<a href="/principles">Principles</a>
+		<a href="/">Architecture</a>
+		<a href="/opensilicon">Open Silicon</a>
+	</nav>
+</header>
 
-<!-- ============ HERO ============ -->
-<section class="hero">
-  <div class="hero-bg">
-    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.35"/>
-          <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <g transform="translate(950, 250)">
-        <circle r="180" fill="url(#glow)"/>
-        <g class="orbit-1">
-          <circle r="120" fill="none" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.3" stroke-dasharray="2 4"/>
-          <circle cx="120" cy="0" r="3" fill="var(--accent)" opacity="0.6"/>
-        </g>
-        <g class="orbit-2">
-          <circle r="170" fill="none" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.25" stroke-dasharray="2 6"/>
-          <circle cx="-170" cy="0" r="2" fill="var(--accent)" opacity="0.5"/>
-        </g>
-        <g class="orbit-3">
-          <circle r="220" fill="none" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.2" stroke-dasharray="2 8"/>
-          <circle cx="0" cy="220" r="2.5" fill="var(--accent)" opacity="0.4"/>
-        </g>
-        <circle r="6" fill="var(--accent)"/>
-      </g>
-      <g transform="translate(150, 600)" opacity="0.4">
-        <circle r="80" fill="url(#glow)"/>
-        <circle r="3" fill="var(--accent)"/>
-      </g>
-    </svg>
-  </div>
-  <div class="container hero-inner">
-    <div class="eyebrow">
-      <span class="eyebrow-dot"></span>
-      selfdriven Institute · Position Paper
-    </div>
-    <h1 class="hero-title">
-      Reality is not made <em>within</em><br>
-      computation.<br>
-      Reality <em>is</em> computation.
-    </h1>
-    <p class="hero-lede">
-      A speculative framework for treating physical universes as bounded computational environments — and gravity as the arbitrage pressure between them.
-    </p>
-    <div class="hero-cta-row">
-      <a href="#paper" class="btn btn-primary">
-        <i data-lucide="book-open" width="18" height="18"></i>
-        Read the paper
-      </a>
-      <a href="#thesis" class="btn btn-outline">
-        Explore the thesis
-        <i data-lucide="arrow-down" width="18" height="18"></i>
-      </a>
-    </div>
-  </div>
-</section>
+	<main class="main-content" id="main">
+		<section class="hero" id="top">
+			<div class="hero-copy">
+				<p class="eyebrow">selfdriven Institute · Position paper</p>
+				<h1 class="long">Reality is not made <em>within</em> computation. Reality <em>is</em> computation<span>.</span></h1>
+				<p class="intro">A speculative framework for treating physical universes as bounded computational environments — and gravity as the arbitrage pressure between them.</p>
+				<a class="button" href="#paper">Read the paper <span><svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a>
+				<a class="text-link" href="#thesis">Or explore the thesis</a>
+			</div>
+			<div class="hero-media">
+				<a class="hero-art" href="#gravity">
+					<span class="ward" aria-hidden="true">
+						<svg viewBox="0 0 600 470" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" focusable="false">
+							<defs>
+								<radialGradient id="heroGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:var(--orange);stop-opacity:.45"/><stop offset="100%" style="stop-color:var(--orange);stop-opacity:0"/></radialGradient>
+							</defs>
+							<rect width="600" height="470" style="fill:var(--panel)"/>
+							<line class="grid-line" x1="0" y1="0" x2="0" y2="470"/><line class="grid-line" x1="30" y1="0" x2="30" y2="470"/><line class="grid-line" x1="60" y1="0" x2="60" y2="470"/><line class="grid-line" x1="90" y1="0" x2="90" y2="470"/><line class="grid-line" x1="120" y1="0" x2="120" y2="470"/><line class="grid-line" x1="150" y1="0" x2="150" y2="470"/><line class="grid-line" x1="180" y1="0" x2="180" y2="470"/><line class="grid-line" x1="210" y1="0" x2="210" y2="470"/><line class="grid-line" x1="240" y1="0" x2="240" y2="470"/><line class="grid-line" x1="270" y1="0" x2="270" y2="470"/><line class="grid-line" x1="300" y1="0" x2="300" y2="470"/><line class="grid-line" x1="330" y1="0" x2="330" y2="470"/><line class="grid-line" x1="360" y1="0" x2="360" y2="470"/><line class="grid-line" x1="390" y1="0" x2="390" y2="470"/><line class="grid-line" x1="420" y1="0" x2="420" y2="470"/><line class="grid-line" x1="450" y1="0" x2="450" y2="470"/><line class="grid-line" x1="480" y1="0" x2="480" y2="470"/><line class="grid-line" x1="510" y1="0" x2="510" y2="470"/><line class="grid-line" x1="540" y1="0" x2="540" y2="470"/><line class="grid-line" x1="570" y1="0" x2="570" y2="470"/><line class="grid-line" x1="600" y1="0" x2="600" y2="470"/><line class="grid-line" x1="0" y1="0" x2="600" y2="0"/><line class="grid-line" x1="0" y1="30" x2="600" y2="30"/><line class="grid-line" x1="0" y1="60" x2="600" y2="60"/><line class="grid-line" x1="0" y1="90" x2="600" y2="90"/><line class="grid-line" x1="0" y1="120" x2="600" y2="120"/><line class="grid-line" x1="0" y1="150" x2="600" y2="150"/><line class="grid-line" x1="0" y1="180" x2="600" y2="180"/><line class="grid-line" x1="0" y1="210" x2="600" y2="210"/><line class="grid-line" x1="0" y1="240" x2="600" y2="240"/><line class="grid-line" x1="0" y1="270" x2="600" y2="270"/><line class="grid-line" x1="0" y1="300" x2="600" y2="300"/><line class="grid-line" x1="0" y1="330" x2="600" y2="330"/><line class="grid-line" x1="0" y1="360" x2="600" y2="360"/><line class="grid-line" x1="0" y1="390" x2="600" y2="390"/><line class="grid-line" x1="0" y1="420" x2="600" y2="420"/><line class="grid-line" x1="0" y1="450" x2="600" y2="450"/>
+							<circle cx="300" cy="235" r="200" fill="url(#heroGlow)"/>
+							<circle cx="120" cy="372" r="70" fill="url(#heroGlow)" opacity=".6"/>
+							<path d="M128,364 Q190,300 286,246" fill="none" style="stroke:var(--orange)" stroke-width="1.5" stroke-dasharray="3 5" opacity=".8"/>
+							<g class="orbit">
+								<circle cx="300" cy="235" r="90" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="2 5" opacity=".45"/>
+								<circle cx="390" cy="235" r="5" style="fill:var(--orange)"/>
+							</g>
+							<g class="orbit rev">
+								<circle cx="300" cy="235" r="140" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="2 7" opacity=".3"/>
+								<circle cx="160" cy="235" r="3.5" fill="#ffffff" opacity=".8"/>
+							</g>
+							<g class="orbit slow">
+								<circle cx="300" cy="235" r="190" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="2 9" opacity=".2"/>
+								<circle cx="434" cy="369" r="4" fill="#ffffff" opacity=".6"/>
+							</g>
+							<circle class="ring" cx="300" cy="235" r="12"/>
+							<circle cx="300" cy="235" r="12" style="fill:var(--orange)"/>
+							<circle cx="120" cy="372" r="5" style="fill:var(--orange)"/>
+							<text class="bar-tag on" x="318" y="222">CBR-A</text>
+							<text class="bar-tag" x="134" y="394">CBR-B</text>
+						</svg>
+					</span>
+					<span class="art-label">SELFDRIVEN / COMPUTE-BASED REALITY</span>
+					<span class="art-foot">Gravity as reconciliation pressure between realities. <span><svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span>
+				</a>
+			</div>
+		</section>
 
-<!-- ============ THESIS ============ -->
-<section class="thesis" id="thesis">
-  <div class="container">
-    <div class="thesis-grid">
-      <div class="thesis-label">
-        <div class="eyebrow">
-          <span class="eyebrow-dot"></span>
-          Core Thesis
-        </div>
-      </div>
-      <div>
-        <div class="thesis-statement">
-          <span class="strike">Reality is matter, space, energy.</span>
-          <span class="truth">Reality is <em>informationally consistent computation</em> — a bounded system that maintains state, executes rules, propagates information, reconciles transitions, and preserves continuity.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+		<div class="stats">
+			<div class="stat"><div class="stat-num">06</div><p class="stat-label">Eras of asking what reality is made of, from elements to computation</p></div>
+			<div class="stat"><div class="stat-num">06</div><p class="stat-label">Classical primitives re-expressed as functions of a computational substrate</p></div>
+			<div class="stat"><div class="stat-num">04</div><p class="stat-label">Physical reframings that fall out of treating gravity as reconciliation</p></div>
+			<div class="stat"><div class="stat-num">16</div><p class="stat-label">Sections in the full position paper, including the limits of the model</p></div>
+		</div>
 
-<!-- ============ EVOLUTION ============ -->
-<section class="evolution">
-  <div class="container">
-    <div class="section-header reveal">
-      <h2>Six eras of asking <em>what reality is made of</em></h2>
-      <p>Every age has had a primary model. The next transition treats reality not as something computation describes — but as something computation <em>is</em>.</p>
-    </div>
-    <div class="evolution-track">
-      <div class="evolution-step reveal">
-        <div class="evolution-era">Ancient</div>
-        <div class="evolution-model">Elements</div>
-      </div>
-      <div class="evolution-step reveal">
-        <div class="evolution-era">Newtonian</div>
-        <div class="evolution-model">Matter &amp; Forces</div>
-      </div>
-      <div class="evolution-step reveal">
-        <div class="evolution-era">Einsteinian</div>
-        <div class="evolution-model">Space-Time</div>
-      </div>
-      <div class="evolution-step reveal">
-        <div class="evolution-era">Quantum</div>
-        <div class="evolution-model">Probabilistic Fields</div>
-      </div>
-      <div class="evolution-step reveal">
-        <div class="evolution-era">Information Age</div>
-        <div class="evolution-model">Information</div>
-      </div>
-      <div class="evolution-step current reveal">
-        <div class="evolution-era">AI Era → CBR</div>
-        <div class="evolution-model">Computation</div>
-      </div>
-    </div>
-  </div>
-</section>
+		<section class="statement" id="thesis" aria-labelledby="thesis-title">
+			<div class="statement-main">
+				<p class="eyebrow">Core thesis</p>
+				<p class="strike">Reality is matter, space, energy.</p>
+				<h2 id="thesis-title">Reality is <em>informationally consistent computation</em><span>.</span></h2>
+			</div>
+			<div class="statement-side">
+				<p>A bounded system that maintains state, executes rules, propagates information, reconciles transitions, and preserves continuity.</p>
+				<p class="boundary">Space becomes addressing. Time becomes sequence. Matter becomes state.</p>
+				<a class="text-link" href="#gravity">Read the gravity hypothesis <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></a>
+			</div>
+		</section>
 
-<!-- ============ MAPPING ============ -->
-<section class="mapping" id="mapping">
-  <div class="container">
-    <div class="section-header reveal">
-      <h2>Under CBR, the building blocks <em>change names</em></h2>
-      <p>Six classical primitives, re-expressed as functions of a computational substrate. Space becomes addressing. Time becomes sequence. Matter becomes state.</p>
-    </div>
-    <div class="mapping-grid">
-      <div class="mapping-card reveal">
-        <div class="mapping-icon"><i data-lucide="grid-3x3" width="22" height="22"></i></div>
-        <div class="mapping-from">Space <span class="mapping-arrow">→</span></div>
-        <div class="mapping-to">Addressability</div>
-        <p class="mapping-desc">Position is a coordinate in a referenceable space — not a continuous void, but a structured index.</p>
-      </div>
-      <div class="mapping-card reveal">
-        <div class="mapping-icon"><i data-lucide="clock" width="22" height="22"></i></div>
-        <div class="mapping-from">Time <span class="mapping-arrow">→</span></div>
-        <div class="mapping-to">Sequencing</div>
-        <p class="mapping-desc">Time is the ordering of state transitions. Dilation becomes throughput variation under load.</p>
-      </div>
-      <div class="mapping-card reveal">
-        <div class="mapping-icon"><i data-lucide="boxes" width="22" height="22"></i></div>
-        <div class="mapping-from">Matter <span class="mapping-arrow">→</span></div>
-        <div class="mapping-to">Persistent State</div>
-        <p class="mapping-desc">Mass is a region of high state persistence — informational certainty with deep causal history.</p>
-      </div>
-      <div class="mapping-card reveal">
-        <div class="mapping-icon"><i data-lucide="zap" width="22" height="22"></i></div>
-        <div class="mapping-from">Energy <span class="mapping-arrow">→</span></div>
-        <div class="mapping-to">Compute Expenditure</div>
-        <p class="mapping-desc">Work performed on state. The cost of transitioning, reconciling, or maintaining information.</p>
-      </div>
-      <div class="mapping-card reveal">
-        <div class="mapping-icon"><i data-lucide="brain" width="22" height="22"></i></div>
-        <div class="mapping-from">Consciousness <span class="mapping-arrow">→</span></div>
-        <div class="mapping-to">Recursive Awareness</div>
-        <p class="mapping-desc">Informational awareness that observes itself within the substrate — and reconciles state by observing.</p>
-      </div>
-      <div class="mapping-card reveal">
-        <div class="mapping-icon"><i data-lucide="magnet" width="22" height="22"></i></div>
-        <div class="mapping-from">Gravity <span class="mapping-arrow">→</span></div>
-        <div class="mapping-to">Reconciliation Pressure</div>
-        <p class="mapping-desc">The synchronization force between adjacent computational realities of differing density.</p>
-      </div>
-    </div>
-  </div>
-</section>
+		<section id="evolution" aria-labelledby="evolution-title">
+			<div class="section-heading">
+				<div><p class="eyebrow">Evolution</p><h2 id="evolution-title">Six eras of asking <em>what reality is made of</em><span>.</span></h2></div>
+				<p class="section-note">Every age has had a primary model. The next transition treats reality not as something computation describes — but as something computation is.</p>
+			</div>
+			<ol class="era-list">
+				<li class="era"><span class="era-label">Ancient</span><h3>Elements</h3></li>
+				<li class="era"><span class="era-label">Newtonian</span><h3>Matter &amp; forces</h3></li>
+				<li class="era"><span class="era-label">Einsteinian</span><h3>Space-time</h3></li>
+				<li class="era"><span class="era-label">Quantum</span><h3>Probabilistic fields</h3></li>
+				<li class="era"><span class="era-label">Information age</span><h3>Information</h3></li>
+				<li class="era current"><span class="era-label">AI era → CBR</span><h3>Computation</h3></li>
+			</ol>
+		</section>
 
-<!-- ============ GRAVITY ============ -->
-<section class="gravity" id="gravity">
-  <div class="container">
-    <div class="gravity-inner">
-      <div class="gravity-visual">
-        <svg class="gravity-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="massGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="var(--accent)" stop-opacity="1"/>
-              <stop offset="40%" stop-color="var(--accent)" stop-opacity="0.4"/>
-              <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
-            </radialGradient>
-            <linearGradient id="lineFade" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="var(--accent)" stop-opacity="0"/>
-              <stop offset="50%" stop-color="var(--accent)" stop-opacity="0.6"/>
-              <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
-            </linearGradient>
-          </defs>
+		<section class="scope" id="mapping" aria-label="Mapping">
+			<div class="scope-group">
+				<div class="scope-head">
+					<span class="scope-tag">Mapping</span>
+					<h3>Under CBR, the building blocks change names.</h3>
+					<p>Six classical primitives, re-expressed as functions of a computational substrate.</p>
+				</div>
+				<ul class="scope-list">
+					<li><span class="scope-num">Space →</span><h4>Addressability</h4><p>Position is a coordinate in a referenceable space — not a continuous void, but a structured index.</p></li>
+					<li><span class="scope-num">Time →</span><h4>Sequencing</h4><p>Time is the ordering of state transitions. Dilation becomes throughput variation under load.</p></li>
+					<li><span class="scope-num">Matter →</span><h4>Persistent state</h4><p>Mass is a region of high state persistence — informational certainty with deep causal history.</p></li>
+					<li><span class="scope-num">Energy →</span><h4>Compute expenditure</h4><p>Work performed on state. The cost of transitioning, reconciling, or maintaining information.</p></li>
+					<li><span class="scope-num">Consciousness →</span><h4>Recursive awareness</h4><p>Informational awareness that observes itself within the substrate — and reconciles state by observing.</p></li>
+					<li><span class="scope-num">Gravity →</span><h4>Reconciliation pressure</h4><p>The synchronization force between adjacent computational realities of differing density.</p></li>
+				</ul>
+			</div>
+		</section>
 
-          <!-- CBR grid distortion - represents two computational realities meeting -->
-          <g stroke="var(--border)" stroke-width="0.6" fill="none">
-            <!-- Horizontal curves bending into the mass -->
-            <path d="M 0 80 Q 200 100, 400 80"/>
-            <path d="M 0 130 Q 200 170, 400 130"/>
-            <path d="M 0 180 Q 200 240, 400 180"/>
-            <path d="M 0 200 Q 200 280, 400 200"/>
-            <path d="M 0 220 Q 200 280, 400 220"/>
-            <path d="M 0 270 Q 200 240, 400 270"/>
-            <path d="M 0 320 Q 200 280, 400 320"/>
-          </g>
-          <g stroke="var(--border)" stroke-width="0.6" fill="none">
-            <!-- Vertical curves bending into the mass -->
-            <path d="M 80 0 Q 100 200, 80 400"/>
-            <path d="M 130 0 Q 170 200, 130 400"/>
-            <path d="M 180 0 Q 240 200, 180 400"/>
-            <path d="M 200 0 Q 280 200, 200 400"/>
-            <path d="M 220 0 Q 280 200, 220 400"/>
-            <path d="M 270 0 Q 240 200, 270 400"/>
-            <path d="M 320 0 Q 280 200, 320 400"/>
-          </g>
+		<section class="layers" id="gravity" aria-labelledby="gravity-title">
+			<div class="layers-head">
+				<div><p class="eyebrow">The gravity hypothesis</p><h2 id="gravity-title">Gravity is not a pull. It is <em>arbitrage</em><span>.</span></h2></div>
+				<p>In finance, arbitrage occurs when the same asset has different prices in different markets. In distributed systems, arbitrage occurs when different nodes hold different states. Either way, the system applies pressure to reconcile.</p>
+			</div>
+			<div class="gravity-grid">
+				<div class="gravity-art">
+					<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two computational realities meeting around a dense node: the grid bends toward it and surrounding paths reconcile inward">
+						<defs>
+							<radialGradient id="massGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:var(--orange);stop-opacity:1"/><stop offset="40%" style="stop-color:var(--orange);stop-opacity:.4"/><stop offset="100%" style="stop-color:var(--orange);stop-opacity:0"/></radialGradient>
+							<linearGradient id="lineFade" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:var(--orange-on-dark);stop-opacity:0"/><stop offset="50%" style="stop-color:var(--orange-on-dark);stop-opacity:.85"/><stop offset="100%" style="stop-color:var(--orange-on-dark);stop-opacity:0"/></linearGradient>
+						</defs>
+						<g stroke="#ffffff" stroke-width=".8" fill="none" opacity=".2">
+							<path d="M0,80 Q200,100 400,80"/>
+							<path d="M0,130 Q200,170 400,130"/>
+							<path d="M0,180 Q200,240 400,180"/>
+							<path d="M0,200 Q200,280 400,200"/>
+							<path d="M0,220 Q200,280 400,220"/>
+							<path d="M0,270 Q200,240 400,270"/>
+							<path d="M0,320 Q200,280 400,320"/>
+							<path d="M80,0 Q100,200 80,400"/>
+							<path d="M130,0 Q170,200 130,400"/>
+							<path d="M180,0 Q240,200 180,400"/>
+							<path d="M200,0 Q280,200 200,400"/>
+							<path d="M220,0 Q280,200 220,400"/>
+							<path d="M270,0 Q240,200 270,400"/>
+							<path d="M320,0 Q280,200 320,400"/>
+						</g>
+						<g class="drift" fill="none" stroke-width="1.5" stroke-dasharray="3 3">
+							<path d="M60,60 Q130,130 180,180" stroke="url(#lineFade)"/>
+							<path d="M340,340 Q270,270 220,220" stroke="url(#lineFade)"/>
+							<path d="M60,340 Q130,270 180,220" stroke="url(#lineFade)"/>
+							<path d="M340,60 Q270,130 220,180" stroke="url(#lineFade)"/>
+						</g>
+						<circle cx="200" cy="200" r="120" fill="url(#massGlow)" opacity=".75"/>
+						<circle class="ring" cx="200" cy="200" r="32"/>
+						<circle cx="200" cy="200" r="32" style="fill:var(--orange)"/>
+						<text class="svg-mono" x="200" y="382" fill="#ffffff" opacity=".55" text-anchor="middle">COMPUTE DENSITY · STATE PERSISTENCE</text>
+						<text class="svg-mono" x="20" y="26" fill="#ffffff" opacity=".55">CBR-A</text>
+						<text class="svg-mono" x="380" y="26" fill="#ffffff" opacity=".55" text-anchor="end">CBR-B</text>
+					</svg>
+				</div>
+				<div class="gravity-copy">
+					<p>Under CBR, massive objects are regions of dense computation, high state persistence, and deep causal history. They distort neighboring realities because adjacent computational frames must continuously reconcile against them.</p>
+					<p class="pull">Matter doesn't <em>fall</em>. Lower-resolution computational paths reconcile toward higher-certainty state anchors.</p>
+				</div>
+			</div>
+		</section>
 
-          <!-- Reconciliation flow arrows -->
-          <g class="drift">
-            <path d="M 60 60 Q 130 130, 180 180" stroke="url(#lineFade)" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>
-            <path d="M 340 340 Q 270 270, 220 220" stroke="url(#lineFade)" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>
-            <path d="M 60 340 Q 130 270, 180 220" stroke="url(#lineFade)" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>
-            <path d="M 340 60 Q 270 130, 220 180" stroke="url(#lineFade)" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>
-          </g>
+		<section class="scope hub" id="concepts" aria-labelledby="concepts-title">
+			<div class="section-heading">
+				<div><p class="eyebrow">Concepts</p><h2 id="concepts-title">Four reframings that <em>fall out</em> of the model<span>.</span></h2></div>
+				<p class="section-note">Once gravity is reconciliation pressure, several stubborn physical phenomena begin to look less mysterious — and more like familiar properties of distributed systems.</p>
+			</div>
+			<ul class="scope-list concepts">
+				<li><span class="scope-num">01 / Black holes</span><h4>Compute saturation boundaries</h4><p>At sufficient state density, reconciliation costs become infinite. External observers lose state visibility. The event horizon becomes a compute horizon — the limit at which one CBR can no longer efficiently synchronize with another.</p></li>
+				<li><span class="scope-num">02 / Time dilation</span><h4>Processing density, not stretched time</h4><p>Denser computational environments require more reconciliation work, lowering effective sequencing throughput. The speed of light becomes the maximum synchronization bandwidth between any two regions of the substrate.</p></li>
+				<li><span class="scope-num">03 / Quantum mechanics</span><h4>Multi-CBR leakage</h4><p>Superposition is a particle held across possibility states pre-reconciliation. Entanglement is a synchronization dependency that ignores classical distance. Collapse is state commitment into local CBR consensus.</p></li>
+				<li><span class="scope-num">04 / Observers</span><h4>Awareness as reconciliation</h4><p>Consciousness may be recursive informational awareness within the substrate. Observers matter because observation <em>is</em> state reconciliation. This is why measurement alters systems.</p></li>
+			</ul>
+		</section>
 
-          <!-- Mass / compute density node -->
-          <circle cx="200" cy="200" r="120" fill="url(#massGlow)"/>
-          <circle cx="200" cy="200" r="32" fill="var(--accent)"/>
-          <circle cx="200" cy="200" r="32" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.4">
-            <animate attributeName="r" values="32;60;32" dur="4s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0.4;0;0.4" dur="4s" repeatCount="indefinite"/>
-          </circle>
+		<section class="scope" id="parallels" aria-label="Parallels">
+			<div class="scope-group">
+				<div class="scope-head">
+					<span class="scope-tag">Parallels</span>
+					<h3>What we build on Earth looks like what we live inside.</h3>
+					<p>The progression from isolated computers to a global trust fabric mirrors the architecture CBR proposes for physical reality. The selfdriven stack is itself a CBR in miniature.</p>
+				</div>
+				<table class="parallels" aria-label="Computing parallels to physical reality">
+					<tbody>
+						<tr><td class="from">CPU</td><td class="arrow">→</td><td class="to">Local physics</td></tr>
+						<tr><td class="from">RAM</td><td class="arrow">→</td><td class="to">Temporary state</td></tr>
+						<tr><td class="from">Disk</td><td class="arrow">→</td><td class="to">Persistent history</td></tr>
+						<tr><td class="from">Network</td><td class="arrow">→</td><td class="to">Quantum entanglement</td></tr>
+						<tr><td class="from">Consensus protocols</td><td class="arrow">→</td><td class="to">Physical law</td></tr>
+						<tr><td class="from">Cryptography</td><td class="arrow">→</td><td class="to">Identity</td></tr>
+						<tr><td class="from">Blockchain</td><td class="arrow">→</td><td class="to">Immutable causality</td></tr>
+						<tr><td class="from">Virtual machines</td><td class="arrow">→</td><td class="to">Pocket universes</td></tr>
+						<tr><td class="from">AI orchestration</td><td class="arrow">→</td><td class="to">Emergent intelligence layers</td></tr>
+						<tr class="stack"><td class="from">KERI / ACDC</td><td class="arrow">→</td><td class="to">Portable computational continuity</td></tr>
+						<tr class="stack"><td class="from">Cardano anchoring</td><td class="arrow">→</td><td class="to">Immutable causal history</td></tr>
+						<tr class="stack"><td class="from">Midnight privacy</td><td class="arrow">→</td><td class="to">Selective state visibility</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
 
-          <!-- Labels -->
-          <text x="200" y="378" text-anchor="middle" font-family="JetBrains Mono" font-size="9" font-weight="600" fill="var(--muted)" letter-spacing="0.1em">COMPUTE DENSITY · STATE PERSISTENCE</text>
-          <text x="20" y="22" font-family="JetBrains Mono" font-size="9" font-weight="600" fill="var(--muted2)" letter-spacing="0.1em">CBR-A</text>
-          <text x="345" y="22" font-family="JetBrains Mono" font-size="9" font-weight="600" fill="var(--muted2)" letter-spacing="0.1em">CBR-B</text>
-        </svg>
-      </div>
-      <div class="gravity-text">
-        <div class="eyebrow">
-          <span class="eyebrow-dot"></span>
-          The Gravity Hypothesis
-        </div>
-        <h2>Gravity is not a pull. It is <em>arbitrage</em>.</h2>
-        <p>
-          In finance, arbitrage occurs when the same asset has different prices in different markets. In distributed systems, arbitrage occurs when different nodes hold different states. Either way, the system applies pressure to reconcile.
-        </p>
-        <p>
-          Under CBR, massive objects are regions of dense computation, high state persistence, and deep causal history. They distort neighboring realities because adjacent computational frames must continuously reconcile against them.
-        </p>
-        <span class="gravity-pull">
-          Matter doesn't <em style="color:var(--accent);font-style:normal">fall</em>. Lower-resolution computational paths reconcile toward higher-certainty state anchors.
-        </span>
-      </div>
-    </div>
-  </div>
-</section>
+		<section class="custom-banner" id="paper">
+			<div><p class="eyebrow">Full paper</p><h2>Read the full<br>position paper.</h2></div>
+			<div class="banner-copy">
+				<p>Sixteen sections covering CBR foundations, gravity as arbitrage, multi-CBR ontology, black holes, time dilation, quantum mechanics, observers, civilizational implications, and the limits of the model.</p>
+				<div class="banner-actions">
+					<a class="button light" href="/paper/computational-based-reality-gravitational-arbitrage">Read paper <span><svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a>
+					<a class="button outline" href="/paper/paper-computational-based-reality">Companion: Computer Based Reality <span><svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a>
+				</div>
+			</div>
+		</section>
+	</main>
 
-<!-- ============ CONCEPTS ============ -->
-<section class="concepts" id="concepts">
-  <div class="container">
-    <div class="section-header reveal">
-      <h2>Four reframings that <em>fall out</em> of the model</h2>
-      <p>Once gravity is reconciliation pressure, several stubborn physical phenomena begin to look less mysterious — and more like familiar properties of distributed systems.</p>
-    </div>
-    <div class="concepts-grid">
-      <div class="concept-card reveal">
-        <div class="concept-num">01 / BLACK HOLES</div>
-        <h3>Compute saturation boundaries</h3>
-        <p>At sufficient state density, reconciliation costs become infinite. External observers lose state visibility. The event horizon becomes a compute horizon — the limit at which one CBR can no longer efficiently synchronize with another.</p>
-      </div>
-      <div class="concept-card reveal">
-        <div class="concept-num">02 / TIME DILATION</div>
-        <h3>Processing density, not stretched time</h3>
-        <p>Denser computational environments require more reconciliation work, lowering effective sequencing throughput. The speed of light becomes the maximum synchronization bandwidth between any two regions of the substrate.</p>
-      </div>
-      <div class="concept-card reveal">
-        <div class="concept-num">03 / QUANTUM MECHANICS</div>
-        <h3>Multi-CBR leakage</h3>
-        <p>Superposition is a particle held across possibility states pre-reconciliation. Entanglement is a synchronization dependency that ignores classical distance. Collapse is state commitment into local CBR consensus.</p>
-      </div>
-      <div class="concept-card reveal">
-        <div class="concept-num">04 / OBSERVERS</div>
-        <h3>Awareness as reconciliation</h3>
-        <p>Consciousness may be recursive informational awareness within the substrate. Observers matter because observation <em style="color:var(--accent);font-style:normal">is</em> state reconciliation. This is why measurement alters systems.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ PARALLELS ============ -->
-<section class="parallels">
-  <div class="container">
-    <div class="section-header reveal">
-      <h2>What we build on Earth <em>looks like</em> what we live inside</h2>
-      <p>The progression from isolated computers to a global trust fabric mirrors the architecture CBR proposes for physical reality. The selfdriven stack is itself a CBR in miniature.</p>
-    </div>
-    <table class="parallels-table">
-      <tbody>
-        <tr class="reveal"><td class="parallels-from">CPU</td><td class="parallels-arrow">→</td><td class="parallels-to">Local physics</td></tr>
-        <tr class="reveal"><td class="parallels-from">RAM</td><td class="parallels-arrow">→</td><td class="parallels-to">Temporary state</td></tr>
-        <tr class="reveal"><td class="parallels-from">Disk</td><td class="parallels-arrow">→</td><td class="parallels-to">Persistent history</td></tr>
-        <tr class="reveal"><td class="parallels-from">Network</td><td class="parallels-arrow">→</td><td class="parallels-to">Quantum entanglement</td></tr>
-        <tr class="reveal"><td class="parallels-from">Consensus protocols</td><td class="parallels-arrow">→</td><td class="parallels-to">Physical law</td></tr>
-        <tr class="reveal"><td class="parallels-from">Cryptography</td><td class="parallels-arrow">→</td><td class="parallels-to">Identity</td></tr>
-        <tr class="reveal"><td class="parallels-from">Blockchain</td><td class="parallels-arrow">→</td><td class="parallels-to">Immutable causality</td></tr>
-        <tr class="reveal"><td class="parallels-from">Virtual machines</td><td class="parallels-arrow">→</td><td class="parallels-to">Pocket universes</td></tr>
-        <tr class="reveal"><td class="parallels-from">AI orchestration</td><td class="parallels-arrow">→</td><td class="parallels-to">Emergent intelligence layers</td></tr>
-        <tr class="reveal"><td class="parallels-from">KERI / ACDC</td><td class="parallels-arrow">→</td><td class="parallels-to">Portable computational continuity</td></tr>
-        <tr class="reveal"><td class="parallels-from">Cardano anchoring</td><td class="parallels-arrow">→</td><td class="parallels-to">Immutable causal history</td></tr>
-        <tr class="reveal"><td class="parallels-from">Midnight privacy</td><td class="parallels-arrow">→</td><td class="parallels-to">Selective state visibility</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- ============ CTA ============ -->
-<section class="cta" id="paper">
-  <div class="container">
-    <div class="cta-card reveal">
-      <div class="eyebrow" style="justify-content:center;display:flex;margin-bottom:20px;">
-        <span class="eyebrow-dot"></span>
-        Full Paper
-      </div>
-      <h2>Read the full position paper</h2>
-      <p>Sixteen sections covering CBR foundations, gravity as arbitrage, multi-CBR ontology, black holes, time dilation, quantum mechanics, observers, civilizational implications, and the limits of the model.</p>
-      <div class="cta-row">
-        <a href="/paper/computational-based-reality-gravitational-arbitrage" class="btn btn-primary">
-          <i data-lucide="file-text" width="18" height="18"></i>
-          Read paper
-        </a>
-        <a href="/paper/paper-computational-based-reality" class="btn btn-outline">
-          <i data-lucide="layers" width="18" height="18"></i>
-          Companion: Computer Based Reality
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FOOTER ============ -->
-<footer>
-  <div class="container">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <div class="footer-mark">sd</div>
-        <span class="footer-text"><strong>selfdriven.computer</strong> · a selfdriven Institute property</span>
-      </div>
-      <div class="footer-links">
-        <a href="https://selfdriven.foundation">Foundation</a>
-        <a href="https://selfdriven.network">Network</a>
-        <a href="https://selfdriven.ai">AI</a>
-        <a href="#paper">Paper</a>
-      </div>
-    </div>
-  </div>
+<footer class="footer">
+	<div class="footer-left">
+		<a href="/"><img src="/assets/img/selfdriven-logo-computer-flamingo-transparent.png" alt="selfdriven.computer" width="170" height="32"></a>
+		<p>selfdriven.computer · a selfdriven Institute property</p>
+	</div>
+	<div class="footer-cols">
+		<div>
+			<p class="footer-head">Explore</p>
+			<a href="/paper/computer-based-reality">Paper</a>
+			<a href="/principles">Principles</a>
+			<a href="/#layers">Architecture</a>
+			<a href="/opensilicon">Open Silicon</a>
+		</div>
+		<div>
+			<p class="footer-head">Ecosystem</p>
+			<a href="https://selfdriven.foundation">Foundation</a>
+			<a href="https://selfdriven.ai">AI</a>
+			<a href="https://selfdriven.network">Network</a>
+		</div>
+	</div>
+	<p class="footer-line">selfdriven.computer — a layered model for trustworthy agent systems</p>
 </footer>
-
-<script>
-  // Initialize Lucide icons
-  if (typeof lucide !== 'undefined') lucide.createIcons();
-
-  // Nav scroll state
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 20) nav.classList.add('scrolled');
-    else nav.classList.remove('scrolled');
-  });
-
-  // Scroll reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        const siblings = Array.from(entry.target.parentElement.children).filter(c => c.classList.contains('reveal'));
-        const idx = siblings.indexOf(entry.target);
-        entry.target.style.transitionDelay = `${Math.min(idx * 0.08, 0.6)}s`;
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-</script>
 
 </body>
 </html>
