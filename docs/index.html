@@ -17,6 +17,15 @@ title: selfdriven Computer
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="/assets/css/computer.css" />
+	<style>
+		.scope-list li.podcast{display:flex;flex-direction:column}
+		.podcast h4{margin-bottom:16px}
+		.podcast audio{width:100%;height:40px;display:block;margin-top:auto}
+		.podcast .domain-tags a.chip{text-decoration:none;transition:border-color .2s}
+		.podcast .domain-tags a.chip:hover{border-color:var(--orange)}
+		.scope-head .head-links{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:18px}
+		.scope-head .head-links a{font-size:15px;font-weight:500;display:inline-flex;align-items:center;gap:6px}
+	</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -331,6 +340,62 @@ title: selfdriven Computer
 			</div>
 		</section>
 
+		<section class="scope hub" id="podcasts" aria-labelledby="podcasts-title">
+			<div class="section-heading">
+				<div><p class="eyebrow">Podcasts</p><h2 id="podcasts-title">Lean and <em>verified</em> AI, in audio<span>.</span></h2></div>
+				<p class="section-note">Four episodes on proving software correct with Lean 4, and on why AI-generated code and agent decisions need formal verification.</p>
+			</div>
+			<div class="scope-group">
+				<div class="scope-head">
+					<span class="scope-tag">Audio · 4 episodes</span>
+					<h3>Start with why, then go deeper.</h3>
+					<p>The series runs from the case for formal verification to how Lean proofs back the decisions an agent makes.</p>
+					<p class="head-links">
+						<a href="/resources/lean-for-beginners">Learn Lean <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></a>
+						<a href="https://github.com/selfdriven-foundation/selfdriven-computer/tree/main/resources/podcasts">All files on GitHub <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></a>
+					</p>
+				</div>
+				<ul class="scope-list">
+					<li class="podcast">
+						<span class="scope-num">EP 01 · 16:30</span>
+						<h4>Why AI code needs formal verification</h4>
+						<audio controls preload="metadata" aria-label="Episode 1: Why AI code needs formal verification">
+							<source src="https://raw.githubusercontent.com/selfdriven-foundation/selfdriven-computer/main/resources/podcasts/Why_AI_Code_Needs_Formal_Verification.m4a" type="audio/mp4">
+							<a href="https://raw.githubusercontent.com/selfdriven-foundation/selfdriven-computer/main/resources/podcasts/Why_AI_Code_Needs_Formal_Verification.m4a">Download episode 1 (m4a)</a>
+						</audio>
+						<p class="domain-tags"><a class="chip" href="https://raw.githubusercontent.com/selfdriven-foundation/selfdriven-computer/main/resources/podcasts/Why_AI_Code_Needs_Formal_Verification.m4a" aria-label="Download episode 1, m4a, 12.1 MB">m4a · 12.1 MB</a></p>
+					</li>
+					<li class="podcast">
+						<span class="scope-num">EP 02 · 18:18</span>
+						<h4>Mathematically proving software with Lean 4</h4>
+						<audio controls preload="metadata" aria-label="Episode 2: Mathematically proving software with Lean 4">
+							<source src="https://raw.githubusercontent.com/selfdriven-foundation/selfdriven-computer/main/resources/podcasts/Mathematically_Proving_Software_with_Lean_4.m4a" type="audio/mp4">
+							<a href="https://raw.githubusercontent.com/selfdriven-foundation/selfdriven-computer/main/resources/podcasts/Mathematically_Proving_Software_with_Lean_4.m4a">Download episode 2 (m4a)</a>
+						</audio>
+						<p class="domain-tags"><a class="chip" href="https://raw.githubusercontent.com/selfdriven-foundation/selfdriven-computer/main/resources/podcasts/Mathematically_Proving_Software_with_Lean_4.m4a" aria-label="Download episode 2, m4a, 13.4 MB">m4a · 13.4 MB</a></p>
+					</li>
+					<li class="podcast">
+						<span class="scope-num">EP 03 · 21:37</span>
+						<h4>How Lean guarantees flawless code</h4>
+						<audio controls preload="metadata" aria-label="Episode 3: How Lean guarantees flawless code">
+							<source src="https://raw.githubusercontent.com/selfdriven-foundation/selfdriven-computer/main/resources/podcasts/How_Lean_Guarantees_Flawless_Code.m4a" type="audio/mp4">
+							<a href="https://raw.githubusercontent.com/selfdriven-foundation/selfdriven-computer/main/resources/podcasts/How_Lean_Guarantees_Flawless_Code.m4a">Download episode 3 (m4a)</a>
+						</audio>
+						<p class="domain-tags"><a class="chip" href="https://raw.githubusercontent.com/selfdriven-foundation/selfdriven-computer/main/resources/podcasts/How_Lean_Guarantees_Flawless_Code.m4a" aria-label="Download episode 3, m4a, 15.8 MB">m4a · 15.8 MB</a></p>
+					</li>
+					<li class="podcast">
+						<span class="scope-num">EP 04 · 21:58</span>
+						<h4>How Lean proofs guarantee AI decisions</h4>
+						<audio controls preload="metadata" aria-label="Episode 4: How Lean proofs guarantee AI decisions">
+							<source src="https://raw.githubusercontent.com/selfdriven-foundation/selfdriven-computer/main/resources/podcasts/How_Lean_Proofs_Guarantee_AI_Decisions.m4a" type="audio/mp4">
+							<a href="https://raw.githubusercontent.com/selfdriven-foundation/selfdriven-computer/main/resources/podcasts/How_Lean_Proofs_Guarantee_AI_Decisions.m4a">Download episode 4 (m4a)</a>
+						</audio>
+						<p class="domain-tags"><a class="chip" href="https://raw.githubusercontent.com/selfdriven-foundation/selfdriven-computer/main/resources/podcasts/How_Lean_Proofs_Guarantee_AI_Decisions.m4a" aria-label="Download episode 4, m4a, 16.1 MB">m4a · 16.1 MB</a></p>
+					</li>
+				</ul>
+			</div>
+		</section>
+
 		<section class="custom-banner">
 			<div><p class="eyebrow">Go deeper</p><h2>Start with the<br>principles.</h2></div>
 			<div class="banner-copy">
@@ -356,6 +421,7 @@ title: selfdriven Computer
 			<a href="/#layers">Architecture</a>
 			<a href="/open-silicon">Open Silicon</a>
 			<a href="/resources/lean-for-beginners">Lean for beginners</a>
+			<a href="/#podcasts">Podcasts</a>
 		</div>
 		<div>
 			<p class="footer-head">Ecosystem</p>
